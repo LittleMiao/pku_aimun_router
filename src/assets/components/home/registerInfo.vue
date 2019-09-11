@@ -1,0 +1,9 @@
+<template>
+  <div>
+    <div>
+      <div>报名注册须知</div>
+      <div>一段文字</div>
+    </div>
+    <div>点击报名</div>
+  </div>
+</template>
