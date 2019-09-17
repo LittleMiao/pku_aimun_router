@@ -39,6 +39,10 @@
 .pkuAsia
   text-align left 
   text-indent 36px
+  display flex
+  flex-direction column
+  align-items center
   div
     margin-top 20px
+    width 80%
 </style>

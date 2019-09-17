@@ -3,15 +3,15 @@
     <headbar />
     <div class="person-body">
       <div class="main-title">个人中心</div>
-      <div class="main-content">
+      <div class="main-content" v-if="!!userId">
         <div class="content-part">
           <div class="sub-title">基本信息</div>
           <ul class="person-info">
-            <li>学校姓名：XXX</li>
-            <li>领队姓名：XXX</li>
-            <li>是否是校内模联组织成员：是/否</li>
-            <li>职位：XXX（若是）</li>
-            <li>联系邮箱：XXX</li>
+            <li>学校姓名: {{schoolName}}</li>
+            <li>领队姓名: {{leaderName}}</li>
+            <li>是否是校内模联组织成员: {{isPKU? "是": "否"}}</li>
+            <li v-if="isPKU">职位: {{position}}</li>
+            <li>联系邮箱: {{mail}}</li>
           </ul>
         </div>
         <div class="content-part">
@@ -28,10 +28,10 @@
                 </tr>
                 <tr>
                   <td>状态</td>
-                  <td>已通过审核</td>
-                  <td>报名信息已确认</td>
-                  <td>分配结果已公布</td>
-                  <td>缴费成功</td>
+                  <td>{{register?"已通过审核":"正在审核中"}}</td>
+                  <td>{{signup?"报名信息已确认":"报名信息确认中"}}</td>
+                  <td>{{commit?"分配结果已公布":"分配结果待公布"}}</td>
+                  <td>{{pay?"缴费成功":"缴费待确认"}}</td>
                 </tr>
               </tbody>
             </table>
@@ -41,6 +41,9 @@
           <div class="person-btn" @click="gotoSignup">查看报名信息</div>
           <div class="person-btn">查看分配结果</div>
         </div>
+      </div>
+      <div class="not-login" v-else>
+        请先登录！
       </div>
     </div>
   </div>
@@ -53,10 +56,37 @@ export default {
   components:{headbar},
   data(){
     return {
+      userId: '',
+      schoolName:'',
+      leaderName:'',
+      isPKU: 0,
+      position:'',
+      mail:'',
       register: false,
       signup: false,
       commit: false,
       pay: false
+    }
+  },
+  methods:{
+    gotoSignup(){
+      this.$router.push('/signup');
+    }
+  },
+  mounted(){
+    console.log(this.$cookies.get('userId'));
+    this.userId = this.$cookies.get('userId');
+    if(this.userId){
+      this.$ajax.post('test/query_personal',{
+        userId: this.userId
+      }).then(data =>{
+        let userInfo = data.data.info;
+        this.schoolName = userInfo.school_name;
+        this.leaderName = userInfo.leader_name;
+        this.isPKU = userInfo.is_pku;
+        this.position = userInfo.position;
+        this.mail = userInfo.user_email;
+      })
     }
   }
 }
@@ -69,13 +99,18 @@ export default {
     font-size 28px
     font-weight bold
     margin-bottom 20px
+  .not-login
+    margin 60px auto
+    font-size 24px
   .main-content
     margin 40px auto
     display flex
     flex-direction column
     justify-content center
-    align-items flex-start
+    align-items center
+    line-height 30px
     .btns
+      margin-top 30px
       display flex
       div:last-child
         margin-left 20px

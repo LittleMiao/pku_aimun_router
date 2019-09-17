@@ -65,9 +65,11 @@
       <div class="swiper-button-next swiper-button-black" slot="button-next"></div>
     <!-- <div class="swiper-scrollbar"   slot="scrollbar"></div> -->
     </swiper> 
-    <div class="swiper-text">
-      <div class="title">主题：联袂、合倡、国是共襄</div>
-      <div class="sub-title">2019年12月13至15日 | 中国，北京</div>
+    <div class="text-wrapper">
+      <div class="swiper-text">
+        <div class="title">主题：联袂、合倡、国是共襄</div>
+        <div class="sub-title">2019年12月13至15日 | 中国，北京</div>
+      </div>
     </div>
   </div>
 </template>
@@ -188,16 +190,21 @@ a {
 color: #42b983;
 }
 .swiper-slide{
-  height:780px;
+  height:640px;
+}
+.text-wrapper{
+  width:100%;
+  display: flex;
+  position: absolute;
+  top: 740px;
+  justify-content: center;
 }
 .swiper-text{
   color: white;
-  position: absolute;
-  top: 880px;
+
   z-index: 999;
-  left: 240px;
   height: 100px;
-  width: 1080px;
+  width: 880px;
   text-align: center;
   background-color: rgba(160, 160, 160, 0.4)
 }

@@ -234,6 +234,8 @@
     border-collapse collapse
     th
       height 32px
+    td
+      width 33% 
     div
       line-height 32px
 </style>

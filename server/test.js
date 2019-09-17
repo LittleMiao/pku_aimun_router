@@ -216,6 +216,28 @@ router.use('/test/query_signup', function (req, res) {
     res.end();
   })
 });
+
+router.use('/test/query_personal', function (req, res) {
+  let sql = "SELECT * from log_info WHERE user_id="+req.body.userId;
+  // let sql = "SELECT * from log_info WHERE user_id=22";
+  query(sql,null,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+        info: result[0],
+      })
+      console.log("success!")
+    }
+    res.end();
+  })
+});
 /*登录*/
 router.use('/test/login',function(req, res){
   // console.log(req.body);

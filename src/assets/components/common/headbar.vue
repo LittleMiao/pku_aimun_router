@@ -5,12 +5,12 @@
       <div class="log-info" v-if="!isLogin"> 
         <div class="log-item" @click="toLogin" > 登录 </div>
         <div class="log-item" @click="toRegister" v-if="!isLogin"> 注册 </div>
-        <div class="log-item" @click="toHelp"> 帮助 </div>
+        <!-- <div class="log-item" @click="toHelp"> 帮助 </div> -->
       </div>
       <div class="log-info" v-else>
         <div class="log-item wide" @click="toPersonal">个人中心</div>
         <div class="log-item wide" @click="logout" > 退出登录 </div>
-        <div class="log-item" @click="toHelp"> 帮助 </div>
+        <!-- <div class="log-item" @click="toHelp"> 帮助 </div> -->
       </div>
     </div>
   </div>
