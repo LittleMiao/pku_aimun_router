@@ -1,11 +1,11 @@
 <template>
   <div class="scroll">
-    <swiper :options="swiperOption" ref="mySwiper">
+    <swiper :options="swiperOption" ref="mySwiper" v-if="files.length>0">
     <!-- slides -->
-      <swiper-slide>
-        <img src="../../img/swiper/5.jpg" style=" height:100%"> 
+      <swiper-slide v-for="item in files" :key="item">
+        <img v-lazy="'../../../../static/swiper/'+item+'.jpg'" style=" height:100%"> 
       </swiper-slide>
-      <swiper-slide>
+      <!-- <swiper-slide>
         <img src="../../img/swiper/6.jpg" style=" height:100%">
       </swiper-slide>
       <swiper-slide>
@@ -55,7 +55,7 @@
       </swiper-slide>
       <swiper-slide>
         <img src="../../img/swiper/22.jpg" style=" height:100%">
-      </swiper-slide>
+      </swiper-slide> -->
       <!-- <swiper-slide>I'm Slide 2</swiper-slide>
       <swiper-slide>I'm Slide 3</swiper-slide>
       <swiper-slide>I'm Slide 4</swiper-slide> -->
@@ -84,7 +84,7 @@ export default {
   },  
   data () {
     return {
-      files: [],
+      files: ['5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
       swiperOption: {  
         notNextTick: true,
         //循环
@@ -132,44 +132,9 @@ export default {
     }  
   }, 
   methods:{
-    getFiles () {
-      const files = require.context('@/assets/img/swiper', false, /.(png|jpg|jpeg|gif|bmp|webp)$/).keys()
-      for (let item of files) {
-        let file = '../../img/swiper/' + item.substring(2)
-        // base64的不加载
-        if (file.indexOf('data:') !== 0) {
-          this.files.push(file)
-        }
-      }
-    },
-    // 图片预加载
-    preload (imgs) {
-      let count = 0
-      for (let img of imgs) {
-        let image = new Image()
-        image.src = img
-        image.onload = () => {
-          count++
-          // 计算图片加载的百分数，绑定到percent变量
-          let percentNum = Math.floor(count / imgs.length * 100)
-          this.percent = `${percentNum}%`
-        }
-      }
-    }
   },
   mounted(){
-    new Promise((resolve, reject) => {
-      this.getFiles()
-      if (this.files.length > 0) {
-        resolve()
-      }
-    }).then(() => {
-      console.log('files:',this.files)
-      this.preload(this.files)
-    }).catch(err => {
-      console.log(err)
-    })
-  }  
+  }
 }
 </script>
 
