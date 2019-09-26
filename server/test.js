@@ -67,11 +67,43 @@ router.use('/test/addMember', function (req, res) {
         id:result.insertId,
         message:'添加成功！',
       })
-      console.log("success!")
+      console.log("addMember:",result)
     }
     res.end();
   })
 });
+router.use('/test/addExp', function(req, res){
+  let sql  ="INSERT INTO exp_info ( present_id, exp_id, conf_name, conf_year, conf_role, is_award, award_name) VALUES(?,?,?,?,?,?,?);";
+  console.log(req.body);
+  let sqlParams = [
+    req.body.present_id,
+    req.body.exp_id,
+    req.body.conf_name,
+    req.body.conf_year,
+    req.body.conf_role,
+    req.body.is_award,
+    req.body.award_name,
+  ];
+  query(sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        message:'添加失败！',
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+        message:'添加成功！',
+      })
+      console.log("addExp:", sqlParams)
+    }
+    res.end();
+  })
+});
+
 router.use('/test/updateMember', function (req, res) {
   let sql  ="UPDATE member_info name=?, gender=?, nation=?, major=?, grade=?, tel=?, email=?, wechat=?, exp_num=?, more=? WHERE idx=? and user_id=?;";
   let sqlParams = [
@@ -198,6 +230,28 @@ router.use('/test/update', function (req, res) {
 });
 router.use('/test/query_signup', function (req, res) {
   let sql = "SELECT * from signup_info WHERE user_id="+req.body.userId;
+  query(sql,null,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+        info: result[0],
+      })
+      console.log("success!")
+    }
+    res.end();
+  })
+});
+
+router.use('/test/query_personal', function (req, res) {
+  let sql = "SELECT * from log_info WHERE user_id="+req.body.userId;
+  // let sql = "SELECT * from log_info WHERE user_id=22";
   query(sql,null,function (err,result) {
     if(err){
       res.json({

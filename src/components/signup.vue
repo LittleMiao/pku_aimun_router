@@ -97,43 +97,61 @@
             </div>
             <div class="list-form">
               <div class="list-num">9.</div>
-              <el-form-item :label="'该代表是否有模联参会经历? \n 如有，请写明会议名称、参会时间及身份。\n Experience in MUN'" >
-                <el-radio v-model="secondStage[addNum].experience.has" :label="true" >是</el-radio>
-                <div class="exp-detail">
-                  <el-form :inline="true" :model="secondStage[addNum].experience" class="demo-form-inline" :disabled="!secondStage[addNum].experience.has">
+              <el-form-item class="title" :label="'该代表是否有模联参会经历? \n 如有，请写明会议名称、参会时间及身份。\n Experience in MUN'" >
+                <el-radio class="choose" v-model="secondStage[addNum].hasExp" :label="true" >是</el-radio>
+                <div v-if="secondStage[addNum].hasExp">
+                <div class="exp-detail" v-for="(exp, index) in secondStage[addNum].experience" :key="index">
+                  <el-form  :inline="true" :model="exp" class="demo-form-inline" >
                     <el-form-item :label="'参会年份\n Year'">
-                      <el-input v-model="secondStage[addNum].experience.year" placeholder=""></el-input>
+                      <el-input v-model="exp.year" placeholder=""></el-input>
                     </el-form-item>
                     <el-form-item :label="'大会名称\n Conference Name'">
-                      <el-input v-model="secondStage[addNum].experience.confName" placeholder=""></el-input>
+                      <el-input v-model="exp.confName" placeholder=""></el-input>
                     </el-form-item>
                     <el-form-item :label="'担任角色\n Role'">
-                      <el-select v-model="secondStage[addNum].experience.role" placeholder="担任角色">
+                      <el-select v-model="exp.role" placeholder="担任角色">
                         <el-option label="Delegate" value="Delegate"></el-option>
                         <el-option label="Chair/Dais Head" value="Chair"></el-option>
                         <el-option label="Dais Member" value="Dais Member"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-form>
+                  <el-form class="prize" :inline="true" :model="exp" v-if="exp.role==='Delegate'" >
+                    <el-form-item :label="'是否获奖 \n Has won prize'" >
+                      <el-radio v-model="exp.is_award" :label="true" >是</el-radio>
+                      <el-radio v-model="exp.is_award" :label="false" >否</el-radio>
+                    </el-form-item>
+                    <el-form-item :label="'所获奖项 \n Type of prize'" v-if="exp.is_award" >
+                      <el-radio v-model="exp.award_name" label="BD" >BD</el-radio>
+                      <el-radio v-model="exp.award_name" label="OD" >OD</el-radio>
+                      <el-radio v-model="exp.award_name" label="HM" >HM</el-radio>
+                      <el-radio v-model="exp.award_name" label="others">
+                        <el-form-item :label="'其他\n Others'" :disabled="exp.award_name!=='others'">
+                          <el-input v-model="exp.award_other" placeholder="请填写"></el-input>
+                        </el-form-item>
+                      </el-radio>
+                    </el-form-item>
+                  </el-form>
                 </div>
-                <el-radio v-model="secondStage[addNum].experience.has" :label="false" >否 </el-radio>
+                </div>
+                <el-radio class="choose" v-model="secondStage[addNum].hasExp" :label="false" >否 </el-radio>
               </el-form-item>
-              <el-form :inline="true" :model="secondStage[addNum].prize" v-if="secondStage[addNum].experience.role==='Delegate'" >
+              <!-- <el-form :inline="true" :model="secondStage[addNum].prize" v-if="secondStage[addNum].experience.role==='Delegate'" >
                 <el-form-item label="是否获奖" >
-                  <el-radio v-model="secondStage[addNum].prize.has" :label="true" >是</el-radio>
-                  <el-radio v-model="secondStage[addNum].prize.has" :label="false" >否</el-radio>
+                  <el-radio v-model="secondStage[addNum].is_award" :label="true" >是</el-radio>
+                  <el-radio v-model="secondStage[addNum].is_award" :label="false" >否</el-radio>
                 </el-form-item>
-                <el-form-item label="所获奖项" v-if="secondStage[addNum].prize.has" >
-                  <el-radio v-model="secondStage[addNum].prize.kind" label="BD" >BD</el-radio>
-                  <el-radio v-model="secondStage[addNum].prize.kind" label="OD" >OD</el-radio>
-                  <el-radio v-model="secondStage[addNum].prize.kind" label="HM" >HM</el-radio>
-                  <el-radio v-model="secondStage[addNum].prize.kind" label="others">
-                    <el-form-item label="其他" :disabled="secondStage[addNum].prize.kind!=='others'">
+                <el-form-item label="所获奖项" v-if="secondStage[addNum].is_award" >
+                  <el-radio v-model="secondStage[addNum].award_name" label="BD" >BD</el-radio>
+                  <el-radio v-model="secondStage[addNum].award_name" label="OD" >OD</el-radio>
+                  <el-radio v-model="secondStage[addNum].award_name" label="HM" >HM</el-radio>
+                  <el-radio v-model="secondStage[addNum].award_name" label="others">
+                    <el-form-item label="其他" :disabled="secondStage[addNum].award_name!=='others'">
                       <el-input v-model="secondStage[addNum].prize.others" placeholder="请填写"></el-input>
                     </el-form-item>
                   </el-radio>
                 </el-form-item>
-              </el-form>
+              </el-form> -->
             </div>
             <div class="list-form">
               <div class="list-num">10.</div>
@@ -210,16 +228,15 @@ export default {
         wechat: '',
         expNum: 0,
         moreinfo: '',
+        hasExp: false,
         experience:[{
-          has: false,
+
           year: '',
           confName: '',
           role: '',
-          prize:{
-            has: false,
-            kind: '',
-            others: ''
-          }
+          is_award: false,
+          award_name: '',
+          award_other: ''
         }]
       }],
       thirdStage:{
@@ -294,17 +311,26 @@ export default {
           wechat: memberInfo.wechat,
           expNum: memberInfo.exp_num,
           moreinfo: memberInfo.more,
+          hasExp: false,
           experience:[{
-            has: false,
             year: '',
             confName: '',
             role: '',
-            prize:{
-              has: false,
-              kind: '',
-              others: ''
-            }
+            is_award: false,
+            award_name: '',
+            award_other: ''
           }]
+        }
+        for(let i=0;i<9;i++){
+          let Exp = {
+            year: '',
+            confName: '',
+            role: '',
+            is_award: false,
+            award_name: '',
+            award_other: ''
+          }
+          tmp.experience.push(Exp)
         }
         // this.secondStage[this.addNum].personName = memberInfo.name;
         // this.secondStage[this.addNum].gender=memberInfo.gender;
@@ -320,6 +346,7 @@ export default {
       })
     },
     submitPerson(){
+      this.secondStage[this.addNum].expNum = this.secondStage[this.addNum].experience.length;
       this.$ajax.post('/test/addMember',{
         userId: this.userId,
         name: this.secondStage[this.addNum].personName,
@@ -336,7 +363,29 @@ export default {
       }).then(success =>{
         this.addNum = this.addNum+1;
         this.presentNum = this.presentNum+1;
+        this.curNum = success.data.id;
+        for(let i = 0; i< this.secondStage[this.addNum].experience.length;i++){
+          let term = this.secondStage[this.addNum].experience[i];
+
+          let a_name = term.award_name;
+          if( term.award_name == "other"){
+            a_name = term.award_other;
+          }
+
+          console.log(term);
+          this.$ajax.post('/test/addExp',{
+            present_id: this.curNum,
+            exp_id: i+1,
+            conf_name: term.confName,
+            conf_year: term.year,
+            conf_role: term.role,
+            is_award: term.is_award,
+            award_name: a_name
+
+          })
+        }
       })
+      console.log(this.curNum);
 
       let ele = {
         personName: '',
@@ -350,15 +399,12 @@ export default {
         expNum: 0,
         moreinfo: '',
         experience:[{
-          has: false,
-          year: '',
+           year: '',
           confName: '',
           role: '',
-          prize:{
-            has: false,
-            kind: '',
-            others: ''
-          }
+          is_award: false,
+          award_name: '',
+          award_other: ''
         }]
       };
       this.secondStage.push(ele);
@@ -405,6 +451,18 @@ export default {
   mounted(){
     console.log(this);
 
+    for(let i=0;i<9;i++){
+      let EXP = {
+          year: '',
+          confName: '',
+          role: '',
+          is_award: false,
+          award_name: '',
+          award_other: ''
+        }
+      this.secondStage[this.addNum].experience.push(EXP);
+    }
+
     this.$ajax.post('/test/query_signup',{
       userId:this.userId
     }).then(data =>{
@@ -422,22 +480,25 @@ export default {
         this.signup = false;
       }
     })
+    
     this.$ajax.post('/test/queryMember',{
       userId:this.userId,
       idx: this.addNum
     }).then(data =>{
-      let memberInfo = data.data.info;
-      console.log(data.data.info);
-      this.secondStage[this.addNum].personName = memberInfo.name;
-      this.secondStage[this.addNum].gender=memberInfo.name;
-      this.secondStage[this.addNum].nation=memberInfo.nation;
-      this.secondStage[this.addNum].major=memberInfo.major;
-      this.secondStage[this.addNum].grade=memberInfo.grade;
-      this.secondStage[this.addNum].phone=memberInfo.tel;
-      this.secondStage[this.addNum].mail=memberInfo.email;
-      this.secondStage[this.addNum].wechat=memberInfo.wechat;
-      this.secondStage[this.addNum].expNum=memberInfo.exp_num;
-      this.secondStage[this.addNum].moreinfo=memberInfo.more;
+      if(data.data.info){
+        let memberInfo = data.data.info;
+        console.log(data);
+        this.secondStage[this.addNum].personName = memberInfo.name;
+        this.secondStage[this.addNum].gender=memberInfo.name;
+        this.secondStage[this.addNum].nation=memberInfo.nation;
+        this.secondStage[this.addNum].major=memberInfo.major;
+        this.secondStage[this.addNum].grade=memberInfo.grade;
+        this.secondStage[this.addNum].phone=memberInfo.tel;
+        this.secondStage[this.addNum].mail=memberInfo.email;
+        this.secondStage[this.addNum].wechat=memberInfo.wechat;
+        this.secondStage[this.addNum].expNum=memberInfo.exp_num;
+        this.secondStage[this.addNum].moreinfo=memberInfo.more;
+      }
     })
   }
 }
@@ -512,6 +573,16 @@ body
         flex-direction row
         align-items center
         margin-left 40px
+        .title
+          min-height 100px
+          .el-form-item__content
+            display flex
+            flex-direction column
+            align-items flex-start
+          .el-form-item__label
+            margin 10px 0
+          .el-radio
+            margin 20px 0
         .el-form-item__label
           white-space pre-line
           line-height 20px
@@ -548,8 +619,37 @@ body
             margin-left 20px
         .exp-detail
           display flex
-          flex-direction row
-          .el-form-item__content
-            margin-left 0
+          flex-direction column
+          align-items center
+          .prize.el-form
+            margin-top 20px
+            display flex
+            flex-direction row
+            align-items center
+            .el-form-item
+              display flex
+              flex-direction row
+              align-items center
+              .el-form-item__content
+                display flex
+                flex-direction row
+                align-items center
+                .el-radio
+                  display flex
+                  flex-direction row
+                  align-items center
+                  margin auto 10px
+          .el-form
+            display flex
+            flex-direction row
+            align-items center
+            .el-form-item
+              display flex
+              flex-direction row
+              align-items center
+              .el-form-item__content
+                margin 10px 0
+
+          
 </style>
 
