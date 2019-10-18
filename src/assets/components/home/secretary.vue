@@ -1,5 +1,6 @@
 <template>
   <div class="secr">  
+    <div class="title">秘书长寄语</div>
     <div class="head">致各位AIMUN成员、指导老师、模联同仁：</div> 
     
     <div class="mail">
@@ -41,6 +42,11 @@
 .secr
   text-align left 
   text-indent 36px
+  .title
+    font-size 24px
+    font-weight bold
+    text-align  center
+    margin-bottom 30px 
   div
     margin-top 20px
   .head

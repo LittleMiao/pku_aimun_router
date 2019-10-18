@@ -65,9 +65,10 @@
   flex-direction column
   align-items center
   .title
-    font-size 32px
+    font-size 24px
     font-weight bold
-    margin 30px auto
+    text-align  center
+    margin-bottom 30px 
   table
     width 80%
     border-collapse collapse

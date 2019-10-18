@@ -2,14 +2,14 @@
   <div id="app">
     <!-- <img src="../../assets/home/header.jpg" style="height: 120px"> -->
     <headbar />
+    <!-- <imgSwiper /> -->
     <naviBar @changeContent="changeContent" />
-    <imgSwiper />
     <mainContent :contentIndex="contentIndex"/>
   </div>
 </template>
 
 <script>
-import imgSwiper from '../assets/components/home/imgSwiper'
+// import imgSwiper from '../assets/components/home/imgSwiper'
 import mainContent from '../assets/components/home/mainContent'
 import naviBar from '../assets/components/home/naviBar'
 import headbar from '../assets/components/common/headbar'
@@ -17,7 +17,7 @@ import headbar from '../assets/components/common/headbar'
 export default {
   name: 'app',
   components: {
-    imgSwiper,
+    // imgSwiper,
     mainContent,
     headbar,
     naviBar

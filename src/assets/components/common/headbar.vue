@@ -62,6 +62,7 @@ export default {
   methods:{
     logout(){
       this.$cookies.remove('userName');
+      this.$cookies.remove('userId');
       setTimeout(()=>{
         this.$router.go(0)
       },200) 

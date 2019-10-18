@@ -2,16 +2,17 @@
   <div class="page-body">
     <div class="content">
       <div class="default" v-if="contentIndex===0">
+        <imgSwiper />
         <div class="content-title">为什么要参加AIMUN？</div>
         <div class="content-text">
           <ul>
             <li>
               <img src="../../img/home/main1.jpg" style="height: 400px">
-              <div><p>深厚的学术基础和底蕴：</p><p>我们致力于维持AIMUN的超高学术水平。
-              除了常规的模拟委员会，AIMUN还设置了特别的大使项目和工作语言为中文的一系列特殊委员会，持续进行对模联活动的学术创新探索。</p></div>
+              <div><p>深厚的学术基础和底蕴：</p><p>我们致力于维持AIMUN的高质量学术水平。
+              除了常规的模拟委员会，AIMUN还设置了独有的大使项目、区域委员会和工作语言为中文的一系列特殊委员会，持续对模联活动进行学术创新探索。</p></div>
             </li>
             <li>
-              <div><p>多元文化的汇集和交流：</p><p>每年都会接待来自世界各地的600余名代表参加，为这些对国际问题有着共同兴趣的年轻人们提供了一个绝佳平台，
+              <div><p>多元文化的汇集和交流：</p><p>每年都会接待来自世界各地的700余名代表参加，为这些对国际问题有着共同兴趣的年轻人们提供了一个绝佳平台，
               来自中国大陆、港澳台地区及海外青年才俊一道，将会议塑造为多元文化、多元观念、多元交流、多元收获的地区盛会。</p></div>
 
               <img src="../../img/home/main2.jpg" style="height: 400px">
@@ -19,7 +20,7 @@
             </li>
             <li>
               <img src="../../img/home/main3.jpg" style="height: 400px">
-              <div><p>丰富的国际外交资源支持：</p><p>作为中国大陆唯一面向大学生的国际性模拟联合国大会，AIMUN每年都邀请到联合国官员、国内外政要及各国大使的出席开幕式并致辞。
+              <div><p>丰富的国际外交资源支持：</p><p>作为中国内地唯一面向大学生的国际性模拟联合国大会，AIMUN每年都邀请到联合国官员、国内外政要及各国大使的出席开幕式并致辞。
               此外，大会也吸引了国内外各界人士的高度关注。</p></div>
             </li>
           </ul>
@@ -59,6 +60,8 @@
 </template>
 <script>
 import { setTimeout } from 'timers';
+import imgSwiper from './imgSwiper';
+
 import pkuInfo from './pkuInfo';
 import secretary from './secretary';
 import committee from './committee';
@@ -83,11 +86,12 @@ export default {
     return{
       countdown: "",
       countdownflag: false,
-      endTime: 1569859199000,
+      endTime: 1579859199000,
       // contentIndex: 0
     }    
   },
   components:{
+    imgSwiper,
     pkuInfo,
     secretary,
     committee,

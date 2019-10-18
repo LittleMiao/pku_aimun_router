@@ -27,7 +27,7 @@
         round>登录</el-button>
       <div class="hint">
         <div @click="gotoRegister">如无账号，请先注册</div>
-        <div>请注意：停止注册时间为（报名截止前两天就停止注册，待补日期）</div>
+        <div>请注意：停止注册时间为10月28日</div>
       </div>
     </div>
     <div class="login-form" v-else>
@@ -62,12 +62,6 @@ export default {
   },
   created () {
   },
-  computed: {
-    btnText() {
-      if (this.isBtnLoading) return '登录中...';
-      return '登录';
-    }
-  },
   methods: {
     changePass() {
       this.visible = !this.visible;
@@ -77,19 +71,23 @@ export default {
         password: this.login.password,
         email: this.login.userName
       }).then(success =>{
+        console.log(success)
         this.$message(success.data.message);
-        this.$cookies.set('userName', this.login.userName)
-        // console.log(this.$cookies.get('userName'));
-        this.$ajax.post('/test/getUid',{
-          email: this.login.userName
-        }).then(data => {
-          console.log("uid:",data.data.info);
-          this.userId = data.data.info;
-          this.$cookies.set('userId', this.userId)
-        })
-        setTimeout(()=>{
-          this.$router.push('/home')
-        },200) 
+        if(success.data.ok){
+          this.$cookies.set('userName', this.login.userName)
+          // console.log(this.$cookies.get('userName'));
+          this.$ajax.post('/test/getUid',{
+            email: this.login.userName
+          }).then(data => {
+            console.log("uid:",data.data.info);
+            this.userId = data.data.info;
+            this.$cookies.set('userId', this.userId)
+          })
+          setTimeout(()=>{
+            this.$router.push('/home')
+          },200) 
+          }
+          
       })
     },
     gotoRegister(){
@@ -97,7 +95,7 @@ export default {
     }
   },
   mounted(){
-    console.log(this)
+    console.log(this.$cookies.get('userId'))
   }
 }
 </script>
