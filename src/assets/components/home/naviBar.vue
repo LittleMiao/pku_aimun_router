@@ -3,38 +3,39 @@
     <div class="list" @click="showImg=!showImg">
       <img src="../../img/home/list.png" style="height: 30px">
     </div>
-    <div class="show-img" v-if="showImg">
+    <div class="show-img" v-if="showImg" @click="changeContent(0)">
       <img src="../../img/home/header.jpg" style="height: 100px">
     </div>
     <div class="show-bar" v-else>
       <div class="navi-bar">
         <div class="navi-text" @mouseenter="showMenu1" @mouseleave="hideMenu1">关于我们</div>
-        <div class="navi-text" @mouseenter="showMenu2" @mouseleave="hideMenu2">北京大学学生模拟联合国交流会</div>
-        <div class="navi-text" @click="changeContent(12)">世界模拟联合国大会</div>
+        <div class="navi-text" @mouseenter="showMenu2" @mouseleave="hideMenu2"><p>北京大学</p><p>学生模拟联合国校际交流会</p></div>
+        <div class="navi-text" @click="changeContent(12)"><p>亚洲国际模拟联合国大会</p><p>(AIMUN)</p></div>
         <div class="navi-text" @click="changeContent(13)">联系我们</div>
         <div class="navi-text" @click="changeContent(14)">常见问题</div>
       </div>
 
       <div class="menu menu-1" v-if="show1 || control1" @mouseenter="showLong1" @mouseleave="hideLong1">
-        <div class="item" @click="changeContent(1)">北京大学</div>
-        <div class="item" @click="changeContent(2)">模拟联合国大会</div>
-        <div class="item" @click="changeContent(3)">秘书长寄语</div>
-        <div class="item" @click="changeContent(4)" @mouseenter="showMenu3" @mouseleave="hideMenu3">组委介绍</div>
+        <div class="item red" @click="changeContent(1)">北京大学</div>
+        <div class="item white" @click="changeContent(2)">北京大学亚洲模拟联合国大会</div>
+        <div class="item red" @click="changeContent(3)">秘书长寄语</div>
+        <!-- <div class="item" @click="changeContent(4)" @mouseenter="showMenu3" @mouseleave="hideMenu3">组委介绍</div> -->
+        <div class="item white" @click="changeContent(4)" >AIMUN2020组委会名单</div>
       </div>
       <div class="menu menu-2" v-if="show2 || control2" @mouseenter="showLong2" @mouseleave="hideLong2">
-        <div class="item" @click="changeContent(7)">简介</div>
-        <div class="item" @click="changeContent(8)">委员会及议题设置</div>
-        <div class="item" @click="changeContent(9)">议事规则</div>
-        <div class="item" @click="changeContent(10)">大会日程</div>
-        <div class="item"  @click="changeContent(11)" @mouseenter="showMenu4" @mouseleave="hideMenu4">报名注册</div>
+        <div class="item red" @click="changeContent(7)">简介</div>
+        <div class="item white" @click="changeContent(8)">委员会及议题设置</div>
+        <div class="item red" @click="changeContent(9)">议事规则</div>
+        <div class="item white" @click="changeContent(10)">大会日程</div>
+        <div class="item red"  @click="changeContent(11)" @mouseenter="showMenu4" @mouseleave="hideMenu4">报名注册</div>
       </div>
-      <div class="menu menu-3" v-if="show3 || control3" @mouseenter="showLong3" @mouseleave="hideLong3">
+      <!-- <div class="menu menu-3" v-if="show3 || control3" @mouseenter="showLong3" @mouseleave="hideLong3">
         <div class="item" @click="changeContent(5)">AIMUN2020组委会名单</div>
         <div class="item" @click="changeContent(6)">组委成员简介</div>
-      </div>
+      </div> -->
       <div class="menu menu-4" v-if="show4 || control4" @mouseenter="showLong4" @mouseleave="hideLong4">
-        <div class="item" @click="changeContent(11)">报名注册须知</div>
-        <div class="item" @click="gotoRegister">点击报名</div>
+        <div class="item white" @click="changeContent(11)">报名注册须知</div>
+        <div class="item red" @click="gotoRegister">点击报名</div>
       </div>
     </div>
   </div>
@@ -168,15 +169,18 @@ export default {
         width 20%
         height 60px
         display flex
+        flex-direction column
         align-items center
         justify-content center
         &:hover
           background-color #a52a2a
           color white
+        p 
+          margin 5px auto
     .menu
       background-color white
-      width 20%
-      text-align left
+      width 19%
+      text-align center
       margin-top 20px
       position absolute
       color #444444
@@ -184,19 +188,25 @@ export default {
       &:hover
         display block
       .item 
-        margin-left 20px
+        margin-left 0
         height 30px
+      
         &:hover
           color #a52a2a
+        // &.red 
+        //   background-color #a52a2a
+        //   color white
+        //   &:hover
+        //     color #444444
     .menu-1
-      left 10%
+      left 5%
     .menu-2
-      left 25%
+      left 24%
     .menu-3
       left 20%
       top 260px
     .menu-4
-      left 35%
+      left 43%
       top 290px
     
 </style>

@@ -1,73 +1,22 @@
 <template>
   <div class="scroll">
-    <swiper :options="swiperOption" ref="mySwiper">
+    <swiper :options="swiperOption" ref="mySwiper" v-if="files.length>0">
     <!-- slides -->
-      <swiper-slide>
-        <img src="../../img/swiper/5.jpg" style=" height:100%"> 
+      <swiper-slide v-for="item in files" :key="item">
+        <img v-lazy="'../../../../static/swiper/'+item+'.jpg'" style=" height:100%"> 
       </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/6.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/7.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/8.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/9.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/10.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/11.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/12.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/13.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/14.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/15.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/16.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/17.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/18.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/19.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/20.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/21.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/22.jpg" style=" height:100%">
-      </swiper-slide>
-      <!-- <swiper-slide>I'm Slide 2</swiper-slide>
-      <swiper-slide>I'm Slide 3</swiper-slide>
-      <swiper-slide>I'm Slide 4</swiper-slide> -->
+     
       <!-- Optional controls -->
       <div class="swiper-pagination "  slot="pagination"></div>
       <div class="swiper-button-prev swiper-button-black" slot="button-prev"></div>
       <div class="swiper-button-next swiper-button-black" slot="button-next"></div>
     <!-- <div class="swiper-scrollbar"   slot="scrollbar"></div> -->
     </swiper> 
-    <div class="swiper-text">
-      <div class="title">主题：联袂、合倡、国是共襄</div>
-      <div class="sub-title">2019年12月13至15日 | 中国，北京</div>
+    <div class="text-wrapper">
+      <div class="swiper-text">
+        <div class="title">主题：联袂、合倡、国是共襄</div>
+        <div class="sub-title">2019年12月13至15日 | 中国，北京</div>
+      </div>
     </div>
   </div>
 </template>
@@ -82,7 +31,7 @@ export default {
   },  
   data () {
     return {
-      files: [],
+      files: ['5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
       swiperOption: {  
         notNextTick: true,
         //循环
@@ -130,44 +79,9 @@ export default {
     }  
   }, 
   methods:{
-    getFiles () {
-      const files = require.context('@/assets/img/swiper', false, /.(png|jpg|jpeg|gif|bmp|webp)$/).keys()
-      for (let item of files) {
-        let file = '../../img/swiper/' + item.substring(2)
-        // base64的不加载
-        if (file.indexOf('data:') !== 0) {
-          this.files.push(file)
-        }
-      }
-    },
-    // 图片预加载
-    preload (imgs) {
-      let count = 0
-      for (let img of imgs) {
-        let image = new Image()
-        image.src = img
-        image.onload = () => {
-          count++
-          // 计算图片加载的百分数，绑定到percent变量
-          let percentNum = Math.floor(count / imgs.length * 100)
-          this.percent = `${percentNum}%`
-        }
-      }
-    }
   },
   mounted(){
-    new Promise((resolve, reject) => {
-      this.getFiles()
-      if (this.files.length > 0) {
-        resolve()
-      }
-    }).then(() => {
-      console.log('files:',this.files)
-      this.preload(this.files)
-    }).catch(err => {
-      console.log(err)
-    })
-  }  
+  }
 }
 </script>
 
@@ -188,16 +102,21 @@ a {
 color: #42b983;
 }
 .swiper-slide{
-  height:780px;
+  height:640px;
+}
+.text-wrapper{
+  width:100%;
+  display: flex;
+  position: absolute;
+  top: 740px;
+  justify-content: center;
 }
 .swiper-text{
   color: white;
-  position: absolute;
-  top: 880px;
+
   z-index: 999;
-  left: 240px;
   height: 100px;
-  width: 1080px;
+  width: 880px;
   text-align: center;
   background-color: rgba(160, 160, 160, 0.4)
 }

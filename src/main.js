@@ -10,12 +10,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/icon/iconfont.css'
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
+import VueLazyload from 'vue-lazyload'
 
 Vue.prototype.$ajax = axios;
 
 Vue.use(VueAwesomeSwiper)
 Vue.use(VueCookies)
 Vue.use(Element)
+Vue.use(VueLazyload)
 
 Vue.config.productionTip = false
 

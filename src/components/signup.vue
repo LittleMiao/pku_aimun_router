@@ -11,7 +11,7 @@
         <a class="infomation signup-btn"  href="">报名须知</a>
         <div class="signup-btn" 
         :class="userId ? null : 'disabled'"
-        @click="nextPage">
+        @click="userId && nextPage()">
           <div v-if="!signup">开始报名</div>
           <div v-else>修改信息</div>
         </div>
@@ -97,43 +97,61 @@
             </div>
             <div class="list-form">
               <div class="list-num">9.</div>
-              <el-form-item :label="'该代表是否有模联参会经历? \n 如有，请写明会议名称、参会时间及身份。\n Experience in MUN'" >
-                <el-radio v-model="secondStage[addNum].experience.has" :label="true" >是</el-radio>
-                <div class="exp-detail">
-                  <el-form :inline="true" :model="secondStage[addNum].experience" class="demo-form-inline" :disabled="!secondStage[addNum].experience.has">
+              <el-form-item class="title" :label="'该代表是否有模联参会经历? \n 如有，请写明会议名称、参会时间及身份。\n Experience in MUN'" >
+                <el-radio class="choose" v-model="secondStage[addNum].hasExp" :label="1" >是</el-radio>
+                <div v-if="secondStage[addNum].hasExp">
+                <div class="exp-detail" v-for="(exp, index) in secondStage[addNum].experience" :key="index">
+                  <el-form  :inline="true" :model="exp" class="demo-form-inline" >
                     <el-form-item :label="'参会年份\n Year'">
-                      <el-input v-model="secondStage[addNum].experience.year" placeholder=""></el-input>
+                      <el-input v-model="exp.year" placeholder=""></el-input>
                     </el-form-item>
                     <el-form-item :label="'大会名称\n Conference Name'">
-                      <el-input v-model="secondStage[addNum].experience.confName" placeholder=""></el-input>
+                      <el-input v-model="exp.confName" placeholder=""></el-input>
                     </el-form-item>
                     <el-form-item :label="'担任角色\n Role'">
-                      <el-select v-model="secondStage[addNum].experience.role" placeholder="担任角色">
+                      <el-select v-model="exp.role" placeholder="担任角色">
                         <el-option label="Delegate" value="Delegate"></el-option>
                         <el-option label="Chair/Dais Head" value="Chair"></el-option>
                         <el-option label="Dais Member" value="Dais Member"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-form>
+                  <el-form class="prize" :inline="true" :model="exp" v-if="exp.role==='Delegate'" >
+                    <el-form-item :label="'是否获奖 \n Has won prize'" >
+                      <el-radio v-model="exp.is_award" :label="1" >是</el-radio>
+                      <el-radio v-model="exp.is_award" :label="0" >否</el-radio>
+                    </el-form-item>
+                    <el-form-item :label="'所获奖项 \n Type of prize'" v-if="exp.is_award" >
+                      <el-radio v-model="exp.award_name" label="BD" >BD</el-radio>
+                      <el-radio v-model="exp.award_name" label="OD" >OD</el-radio>
+                      <el-radio v-model="exp.award_name" label="HM" >HM</el-radio>
+                      <el-radio v-model="exp.award_name" label="others">
+                        <el-form-item :label="'其他\n Others'" :disabled="exp.award_name!=='others'">
+                          <el-input v-model="exp.award_other" placeholder="请填写"></el-input>
+                        </el-form-item>
+                      </el-radio>
+                    </el-form-item>
+                  </el-form>
                 </div>
-                <el-radio v-model="secondStage[addNum].experience.has" :label="false" >否 </el-radio>
+                </div>
+                <el-radio class="choose" v-model="secondStage[addNum].hasExp" :label="0" >否 </el-radio>
               </el-form-item>
-              <el-form :inline="true" :model="secondStage[addNum].prize" v-if="secondStage[addNum].experience.role==='Delegate'" >
+              <!-- <el-form :inline="true" :model="secondStage[addNum].prize" v-if="secondStage[addNum].experience.role==='Delegate'" >
                 <el-form-item label="是否获奖" >
-                  <el-radio v-model="secondStage[addNum].prize.has" :label="true" >是</el-radio>
-                  <el-radio v-model="secondStage[addNum].prize.has" :label="false" >否</el-radio>
+                  <el-radio v-model="secondStage[addNum].is_award" :label="true" >是</el-radio>
+                  <el-radio v-model="secondStage[addNum].is_award" :label="false" >否</el-radio>
                 </el-form-item>
-                <el-form-item label="所获奖项" v-if="secondStage[addNum].prize.has" >
-                  <el-radio v-model="secondStage[addNum].prize.kind" label="BD" >BD</el-radio>
-                  <el-radio v-model="secondStage[addNum].prize.kind" label="OD" >OD</el-radio>
-                  <el-radio v-model="secondStage[addNum].prize.kind" label="HM" >HM</el-radio>
-                  <el-radio v-model="secondStage[addNum].prize.kind" label="others">
-                    <el-form-item label="其他" :disabled="secondStage[addNum].prize.kind!=='others'">
+                <el-form-item label="所获奖项" v-if="secondStage[addNum].is_award" >
+                  <el-radio v-model="secondStage[addNum].award_name" label="BD" >BD</el-radio>
+                  <el-radio v-model="secondStage[addNum].award_name" label="OD" >OD</el-radio>
+                  <el-radio v-model="secondStage[addNum].award_name" label="HM" >HM</el-radio>
+                  <el-radio v-model="secondStage[addNum].award_name" label="others">
+                    <el-form-item label="其他" :disabled="secondStage[addNum].award_name!=='others'">
                       <el-input v-model="secondStage[addNum].prize.others" placeholder="请填写"></el-input>
                     </el-form-item>
                   </el-radio>
                 </el-form-item>
-              </el-form>
+              </el-form> -->
             </div>
             <div class="list-form">
               <div class="list-num">10.</div>
@@ -149,7 +167,7 @@
         <div class="btns">
           <div class="signup-btn" 
           :class="secondStage[addNum].personName === '' || secondStage[addNum].nation === '' || secondStage[addNum].major === '' || secondStage[addNum].phone === '' || secondStage[addNum].mail === '' ? 'disabled' : null"  
-          @click="nextMember" v-if="addNum<presentNum">查看下一个</div>
+          @click="nextMember" v-if="addNum+1 < presentNum">查看下一个</div>
           <div class="signup-btn" 
           :class="secondStage[addNum].personName === '' || secondStage[addNum].nation === '' || secondStage[addNum].major === '' || secondStage[addNum].phone === '' || secondStage[addNum].mail === '' ? 'disabled' : null"  
           @click="submitPerson">添加下一位</div>
@@ -160,6 +178,7 @@
       </div>
       <div class="main-content" v-else-if="stage===3">
         <div class="sub-title">第二部分：参会意愿统计</div>
+        <div class="notice">（领队们请注意，各委员会申请人数总和必须与所提交的代表资料数量一致。因此，这里是填写贵校在一个委员会申请多少个代表数量，而非席位数量。例：前面部分共递交了4位代表的资料，现阶段可以填写SC 2位；GA-2 1位；MPC 1位；其余0位。）</div>
         <div class="will-form">
         <el-form :disabled="pathinfo==='person'">
           <el-form-item class="will-list" :label="pos" v-for="(pos,index) in thirdStage.label" :key="pos">
@@ -208,24 +227,22 @@ export default {
         phone: '',
         mail: '',
         wechat: '',
-        expNum: 0,
         moreinfo: '',
+        hasExp: 0,
         experience:[{
-          has: false,
+
           year: '',
           confName: '',
           role: '',
-          prize:{
-            has: false,
-            kind: '',
-            others: ''
-          }
+          is_award: 0,
+          award_name: '',
+          award_other: ''
         }]
       }],
       thirdStage:{
-        availNum: [0, 0],
-        selectNum: [0, 0],
-        label: ['AB','CD']
+        availNum: [0,0,0,0,0, 0],
+        selectNum: [0,0,0,0,0, 0],
+        label: ['UNSC: 		Nuclear','UNGA-4: 	Peacekeeping','UNGA-1:	PMSC','UNGA-2: 	Financing Strategies','国际电信联盟：5G技术','MPC']
       },
       rule1:{
         schoolName: [{required: true, message:'学校不能为空', trigger: 'blur'}],
@@ -250,39 +267,123 @@ export default {
       {
         this.stage = 2;
       }
-      else if(this.stage === 2 && this.secondStage[this.addNum].personName !== '' || this.secondStage[this.addNum].nation !== '' 
-      || this.secondStage[this.addNum].major !== '' || this.secondStage[this.addNum].phone !== '' || this.secondStage[this.addNum].mail !== '' )
-      {
-        this.$ajax.post('/test/addMember',{
-          userId: this.userId,
-          name: this.secondStage[this.addNum].personName,
-          gender: this.secondStage[this.addNum].gender,
-          nation: this.secondStage[this.addNum].nation,
-          major: this.secondStage[this.addNum].major,
-          grade: this.secondStage[this.addNum].grade,
-          phone: this.secondStage[this.addNum].phone,
-          mail: this.secondStage[this.addNum].mail,
-          wechat: this.secondStage[this.addNum].wechat,
-          expNum: this.secondStage[this.addNum].expNum,
-          moreinfo: this.secondStage[this.addNum].moreinfo,
+      else if(this.stage === 2 && this.secondStage[this.addNum].personName !== '' && this.secondStage[this.addNum].nation !== '' 
+      && this.secondStage[this.addNum].major !== '' && this.secondStage[this.addNum].phone !== '' && this.secondStage[this.addNum].mail !== '' )
+      {    
+        this.$ajax.post('/test/queryMember',{
+          userId:this.userId,
           idx: this.addNum
-        }).then(success => {
-          this.stage = 3;    
-          this.thirdStage.availNum[0] = this.presentNum;
-          this.thirdStage.availNum[1] = this.presentNum;
-          console.log("ava:",this.thirdStage.availNum);
-        })
+        }).then(data =>{
+          // console.log("query:",data);
+          if(data.data.info){
+            console.log("updateMember!")
+            this.$ajax.post('/test/updateMember',{
+              userId: this.userId,
+              name: this.secondStage[this.addNum].personName,
+              gender: this.secondStage[this.addNum].gender,
+              nation: this.secondStage[this.addNum].nation,
+              major: this.secondStage[this.addNum].major,
+              grade: this.secondStage[this.addNum].grade,
+              phone: this.secondStage[this.addNum].phone,
+              mail: this.secondStage[this.addNum].mail,
+              wechat: this.secondStage[this.addNum].wechat,
+              moreinfo: this.secondStage[this.addNum].moreinfo,
+              hasExp: this.secondStage[this.addNum].hasExp,
+              idx: this.addNum
+            }).then(success =>{
+              // console.log("suc:", success);
+              this.curNum = success.data.id;
+              // console.log("sec:", this.secondStage[this.addNum])
+              for(let i = 0; i< this.secondStage[this.addNum].experience.length;i++){
+                let term = this.secondStage[this.addNum].experience[i];
+                // console.log("EXP:", term);
 
+                let a_name = term.award_name;
+                if( term.award_name == "other"){
+                  a_name = term.award_other;
+                }
+                this.$ajax.post('/test/updateExp',{
+                  present_id: this.curNum,
+                  exp_id: i+1,
+                  conf_name: term.confName,
+                  conf_year: term.year,
+                  conf_role: term.role,
+                  is_award: term.is_award,
+                  award_name: a_name
+                })
+              }
+            })
+          }
+          else{
+            console.log("addMember!")
+            this.$ajax.post('/test/addMember',{
+              userId: this.userId,
+              name: this.secondStage[this.addNum].personName,
+              gender: this.secondStage[this.addNum].gender,
+              nation: this.secondStage[this.addNum].nation,
+              major: this.secondStage[this.addNum].major,
+              grade: this.secondStage[this.addNum].grade,
+              phone: this.secondStage[this.addNum].phone,
+              mail: this.secondStage[this.addNum].mail,
+              wechat: this.secondStage[this.addNum].wechat,
+              hasExp: this.secondStage[this.addNum].hasExp,
+              moreinfo: this.secondStage[this.addNum].moreinfo,
+              idx: this.addNum
+            }).then(success =>{
+              console.log("suc:", success);
+              this.curNum = success.data.id;
+              // console.log("sec:", this.secondStage[this.addNum])
+              if(this.secondStage[this.addNum].hasExp === 1){
+                for(let i = 0; i< this.secondStage[this.addNum].experience.length;i++){
+                  let term = this.secondStage[this.addNum].experience[i];
+                  // console.log("EXP:", term);
+                  let a_name = term.award_name;
+                  if( term.award_name == "other"){
+                    a_name = term.award_other;
+                  }
+                  this.$ajax.post('/test/addExp',{
+                    present_id: this.curNum,
+                    exp_id: i+1,
+                    conf_name: term.confName,
+                    conf_year: term.year,
+                    conf_role: term.role,
+                    is_award: term.is_award,
+                    award_name: a_name
+                  })
+        
+                }
+              }
+              this.presentNum = this.presentNum+1;
+              console.log("add presentNum")
+            })
+
+            console.log(this.curNum);
+          }
+        })
+        console.log(this.presentNum, this.addNum)
+        setTimeout(()=>{
+          for(let k = 0;k<6;k++){
+            this.thirdStage.availNum[k] = this.presentNum ;
+            for(let m=0;m<6;m++){
+              if(m!==k)
+                this.thirdStage.availNum[k] = this.thirdStage.availNum[k] - this.thirdStage.selectNum[m];  
+            }
+            if(this.thirdStage.availNum[k] > 4){
+              this.thirdStage.availNum[k] = 4;
+            }
+          }
+          this.stage = 3;
+        },1000)
       }
     },
     nextMember(){
-      this.addNum = this.addNum + 1,
+      console.log(this.addNum)
       this.$ajax.post('/test/queryMember',{
         userId:this.userId,
-        idx: this.addNum
+        idx: this.addNum + 1
       }).then(data =>{
         let memberInfo = data.data.info;
-        console.log(memberInfo);
+        // console.log(memberInfo);
         let tmp = {
           personName: memberInfo.name,
           gender: memberInfo.gender,
@@ -292,20 +393,52 @@ export default {
           phone: memberInfo.tel,
           mail: memberInfo.email,
           wechat: memberInfo.wechat,
-          expNum: memberInfo.exp_num,
           moreinfo: memberInfo.more,
+          hasExp: memberInfo.hasExp,
           experience:[{
-            has: false,
             year: '',
             confName: '',
             role: '',
-            prize:{
-              has: false,
-              kind: '',
-              others: ''
-            }
+            is_award: 0,
+            award_name: '',
+            award_other: ''
           }]
         }
+        for(let i=0;i<9;i++){
+          // console.log(ele.experience);
+          let Exp = {
+            year: '',
+            confName: '',
+            role: '',
+            is_award: 0,
+            award_name: '',
+            award_other: ''
+          }
+          tmp.experience.push(Exp)
+        }
+
+        let pid = memberInfo.present_id;
+        this.$ajax.post('/test/queryExp', {
+          present_id: pid
+        }).then(suc =>{
+          // console.log("exp",suc.data.info)
+          let exp = suc.data.info;
+
+          for(let i=0;i<exp.length;i++){
+            tmp.experience[i].year = exp[i].conf_year;
+            tmp.experience[i].confName = exp[i].conf_name;
+            tmp.experience[i].role = exp[i].conf_role;
+            tmp.experience[i].is_award = exp[i].is_award;
+            if(exp[i].award_name == 'BD' || exp[i].award_name == 'OD' || exp[i].award_name == 'HM'){
+              tmp.experience[i].award_name = exp[i].award_name;              
+            }
+            else{
+              tmp.experience[i].award_other = exp[i].award_name;
+            }          
+          }
+          console.log(tmp.experience);
+        })
+
         // this.secondStage[this.addNum].personName = memberInfo.name;
         // this.secondStage[this.addNum].gender=memberInfo.gender;
         // this.secondStage[this.addNum].nation=memberInfo.nation;
@@ -314,56 +447,150 @@ export default {
         // this.secondStage[this.addNum].phone=memberInfo.tel;
         // this.secondStage[this.addNum].mail=memberInfo.email;
         // this.secondStage[this.addNum].wechat=memberInfo.wechat;
-        // this.secondStage[this.addNum].expNum=memberInfo.exp_num;
         // this.secondStage[this.addNum].moreinfo=memberInfo.more;
         this.secondStage.push(tmp)
       })
+      this.addNum = this.addNum + 1
     },
     submitPerson(){
-      this.$ajax.post('/test/addMember',{
-        userId: this.userId,
-        name: this.secondStage[this.addNum].personName,
-        gender: this.secondStage[this.addNum].gender,
-        nation: this.secondStage[this.addNum].nation,
-        major: this.secondStage[this.addNum].major,
-        grade: this.secondStage[this.addNum].grade,
-        phone: this.secondStage[this.addNum].phone,
-        mail: this.secondStage[this.addNum].mail,
-        wechat: this.secondStage[this.addNum].wechat,
-        expNum: this.secondStage[this.addNum].expNum,
-        moreinfo: this.secondStage[this.addNum].moreinfo,
+      if(this.secondStage[this.addNum].personName === '' || this.secondStage[this.addNum].nation === '' 
+      || this.secondStage[this.addNum].major === '' || this.secondStage[this.addNum].phone === '' || this.secondStage[this.addNum].mail === ''){
+        return;
+      }
+      this.$ajax.post('/test/queryMember',{
+        userId:this.userId,
         idx: this.addNum
-      }).then(success =>{
-        this.addNum = this.addNum+1;
-        this.presentNum = this.presentNum+1;
-      })
+      }).then(data =>{
+        // console.log("query:",data);
+        if(data.data.info){
+          console.log("updateMember!")
+          this.$ajax.post('/test/updateMember',{
+            userId: this.userId,
+            name: this.secondStage[this.addNum].personName,
+            gender: this.secondStage[this.addNum].gender,
+            nation: this.secondStage[this.addNum].nation,
+            major: this.secondStage[this.addNum].major,
+            grade: this.secondStage[this.addNum].grade,
+            phone: this.secondStage[this.addNum].phone,
+            mail: this.secondStage[this.addNum].mail,
+            wechat: this.secondStage[this.addNum].wechat,
+            moreinfo: this.secondStage[this.addNum].moreinfo,
+            hasExp: this.secondStage[this.addNum].hasExp,
+            idx: this.addNum
+          }).then(success =>{
+            // console.log("suc:", success);
+            this.curNum = success.data.id;
+            // console.log("sec:", this.secondStage[this.addNum])
+            for(let i = 0; i< this.secondStage[this.addNum].experience.length;i++){
+              let term = this.secondStage[this.addNum].experience[i];
+              // console.log("EXP:", term);
 
-      let ele = {
-        personName: '',
-        gender: 'male',
-        nation: '',
-        major: '',
-        grade: '2016级及以上本科生',
-        phone: '',
-        mail: '',
-        wechat: '',
-        expNum: 0,
-        moreinfo: '',
-        experience:[{
-          has: false,
-          year: '',
-          confName: '',
-          role: '',
-          prize:{
-            has: false,
-            kind: '',
-            others: ''
+              let a_name = term.award_name;
+              if( term.award_name == "other"){
+                a_name = term.award_other;
+              }
+              this.$ajax.post('/test/updateExp',{
+                present_id: this.curNum,
+                exp_id: i+1,
+                conf_name: term.confName,
+                conf_year: term.year,
+                conf_role: term.role,
+                is_award: term.is_award,
+                award_name: a_name
+              })
+            }
+          })
+        }
+        else{
+          console.log("addMember!")
+          this.$ajax.post('/test/addMember',{
+            userId: this.userId,
+            name: this.secondStage[this.addNum].personName,
+            gender: this.secondStage[this.addNum].gender,
+            nation: this.secondStage[this.addNum].nation,
+            major: this.secondStage[this.addNum].major,
+            grade: this.secondStage[this.addNum].grade,
+            phone: this.secondStage[this.addNum].phone,
+            mail: this.secondStage[this.addNum].mail,
+            wechat: this.secondStage[this.addNum].wechat,
+            moreinfo: this.secondStage[this.addNum].moreinfo,
+            hasExp: this.secondStage[this.addNum].hasExp,
+            idx: this.addNum
+          }).then(success =>{
+            // console.log("suc:", success);
+            this.curNum = success.data.id;
+            // console.log("sec:", this.secondStage[this.addNum])
+            for(let i = 0; i< this.secondStage[this.addNum].experience.length;i++){
+              let term = this.secondStage[this.addNum].experience[i];
+              // console.log("EXP:", term);
+
+              let a_name = term.award_name;
+              if( term.award_name == "other"){
+                a_name = term.award_other;
+              }
+              this.$ajax.post('/test/addExp',{
+                present_id: this.curNum,
+                exp_id: i+1,
+                conf_name: term.confName,
+                conf_year: term.year,
+                conf_role: term.role,
+                is_award: term.is_award,
+                award_name: a_name
+              })
+            }
+            this.presentNum = this.presentNum+1;
+            console.log("add presentNum")
+          })
+        }
+        this.addNum = this.addNum+1;
+        let ele = {
+          personName: '',
+          gender: 'male',
+          nation: '',
+          major: '',
+          grade: '2016级及以上本科生',
+          phone: '',
+          mail: '',
+          wechat: '',
+          moreinfo: '',
+          hasExp:0,
+          experience:[{
+            year: '',
+            confName: '',
+            role: '',
+            is_award: 0,
+            award_name: '',
+            award_other: ''
+          }]
+        };
+
+        for(let i=0;i<9;i++){
+          // console.log(ele.experience);
+          let Exp = {
+            year: '',
+            confName: '',
+            role: '',
+            is_award: 0,
+            award_name: '',
+            award_other: ''
           }
-        }]
-      };
-      this.secondStage.push(ele);
+          ele.experience.push(Exp)
+        }
+
+        this.secondStage.push(ele);
+      })
+      
     },
     submitAll(){
+      let sum_sel = 0;
+      for(let k=0;k<6;k++){
+        sum_sel = sum_sel + this.thirdStage.selectNum[k]
+      }
+      if(sum_sel !== this.presentNum ){
+        console.log(sum_sel, this.presentNum)
+        alert("请为所有代表分配职位！")
+        return;
+      }
       if(this.signup){
         this.$ajax.post('/test/update',{
           userId: this.userId,
@@ -371,7 +598,11 @@ export default {
           leaderName: this.firstStage.leaderName,
           presentNum: this.presentNum,
           unscNum: this.thirdStage.selectNum[0],
-          mpcNum: this.thirdStage.selectNum[1],
+          unga4Num:this.thirdStage.selectNum[1],
+          unga1Num:this.thirdStage.selectNum[2] ,
+          unga2Num:this.thirdStage.selectNum[3],
+          inter5gNum:this.thirdStage.selectNum[4],
+          mpcNum:this.thirdStage.selectNum[5],
           submitTime: (new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString()
         })
       }
@@ -382,20 +613,31 @@ export default {
           leaderName: this.firstStage.leaderName,
           presentNum: this.presentNum,
           unscNum: this.thirdStage.selectNum[0],
-          mpcNum: this.thirdStage.selectNum[1],
+          unga4Num:this.thirdStage.selectNum[1],
+          unga1Num:this.thirdStage.selectNum[2] ,
+          unga2Num:this.thirdStage.selectNum[3],
+          inter5gNum:this.thirdStage.selectNum[4],
+          mpcNum:this.thirdStage.selectNum[5],
           submitTime: (new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString()
         })
       }
+      // this.$ajax.post('/test/getSignup',{
+      //   userId: this.userId
+      // })
       this.stage=4;
+
     },
     updateAva(idx){
-      if(idx === 0){
-        console.log(this.thirdStage.selectNum[0])
-        this.thirdStage.availNum[1] = this.presentNum - this.thirdStage.selectNum[0];
-      }
-      if(idx === 1){
-        console.log(this.thirdStage.selectNum[1])
-        this.thirdStage.availNum[0] = this.presentNum - this.thirdStage.selectNum[1];
+      for(let k = 0;k<6;k++){
+        if(k!==idx)
+          this.thirdStage.availNum[k] = this.presentNum ;
+        for(let m=0;m<6;m++){
+          if(k!==idx && m!==k)
+            this.thirdStage.availNum[k] = this.thirdStage.availNum[k] - this.thirdStage.selectNum[m];  
+        }
+        if(this.thirdStage.availNum[k] > 4){
+          this.thirdStage.availNum[k] = 4;
+        }
       }
     },
     gotoHome(){
@@ -403,42 +645,94 @@ export default {
     }
   },
   mounted(){
-    console.log(this);
+
+    for(let i=0;i<9;i++){
+      let EXP = {
+          year: '',
+          confName: '',
+          role: '',
+          is_award: 0,
+          award_name: '',
+          award_other: ''
+        }
+      this.secondStage[this.addNum].experience.push(EXP);
+    }
 
     this.$ajax.post('/test/query_signup',{
       userId:this.userId
     }).then(data =>{
       let userInfo = data.data.info;
-      console.log(data.data.info)
       if(userInfo){
         this.signup = true;
         this.firstStage.schoolName = userInfo.school_name;
         this.firstStage.leaderName = userInfo.leader_name;
-        this.thirdStage.selectNum[0] = userInfo.mpc_um;
-        this.thirdStage.selectNum[1] = userInfo.unsc_num;
+        this.thirdStage.selectNum[0] = userInfo.unsc_num;
+        this.thirdStage.selectNum[1] = userInfo.unga4_num;
+        this.thirdStage.selectNum[2] = userInfo.unga1_num;
+        this.thirdStage.selectNum[3] = userInfo.unga2_num;
+        this.thirdStage.selectNum[4] = userInfo.inter5g_num;
+        this.thirdStage.selectNum[5] = userInfo.mpc_num;
         this.presentNum = userInfo.present_num;
+        for(let k = 0;k<6;k++){
+          this.thirdStage.availNum[k] = this.presentNum ;
+          for(let m=0;m<6;m++){
+            if(m!==k)
+              this.thirdStage.availNum[k] = this.thirdStage.availNum[k] - this.thirdStage.selectNum[m];  
+          }
+          if(this.thirdStage.availNum[k] > 4){
+            this.thirdStage.availNum[k] = 4;
+          }
+        }
+        console.log("userInfo:",userInfo);
       }
       else{
         this.signup = false;
       }
     })
+    
     this.$ajax.post('/test/queryMember',{
       userId:this.userId,
       idx: this.addNum
     }).then(data =>{
-      let memberInfo = data.data.info;
-      console.log(data.data.info);
-      this.secondStage[this.addNum].personName = memberInfo.name;
-      this.secondStage[this.addNum].gender=memberInfo.name;
-      this.secondStage[this.addNum].nation=memberInfo.nation;
-      this.secondStage[this.addNum].major=memberInfo.major;
-      this.secondStage[this.addNum].grade=memberInfo.grade;
-      this.secondStage[this.addNum].phone=memberInfo.tel;
-      this.secondStage[this.addNum].mail=memberInfo.email;
-      this.secondStage[this.addNum].wechat=memberInfo.wechat;
-      this.secondStage[this.addNum].expNum=memberInfo.exp_num;
-      this.secondStage[this.addNum].moreinfo=memberInfo.more;
+      if(data.data.info){
+        let memberInfo = data.data.info;
+        console.log("mem:",data);
+        this.secondStage[this.addNum].personName = memberInfo.name;
+        this.secondStage[this.addNum].gender=memberInfo.name;
+        this.secondStage[this.addNum].nation=memberInfo.nation;
+        this.secondStage[this.addNum].major=memberInfo.major;
+        this.secondStage[this.addNum].grade=memberInfo.grade;
+        this.secondStage[this.addNum].phone=memberInfo.tel;
+        this.secondStage[this.addNum].mail=memberInfo.email;
+        this.secondStage[this.addNum].wechat=memberInfo.wechat;
+        this.secondStage[this.addNum].moreinfo=memberInfo.more;
+        this.secondStage[this.addNum].hasExp=memberInfo.hasExp;
+        let pid = memberInfo.present_id;
+        if(this.secondStage[this.addNum].hasExp === 1){
+          this.$ajax.post('/test/queryExp', {
+          present_id: pid
+          }).then(suc =>{
+            // console.log("exp",suc.data.info)
+            let exp = suc.data.info;
+            for(let i=0;i<exp.length;i++){
+              this.secondStage[this.addNum].experience[i].year = exp[i].conf_year;
+              this.secondStage[this.addNum].experience[i].confName = exp[i].conf_name;
+              this.secondStage[this.addNum].experience[i].role = exp[i].conf_role;
+              this.secondStage[this.addNum].experience[i].is_award = exp[i].is_award;
+              if(exp[i].award_name == 'BD' || exp[i].award_name == 'OD' || exp[i].award_name == 'HM'){
+                this.secondStage[this.addNum].experience[i].award_name = exp[i].award_name;              
+              }
+              else{
+                this.secondStage[this.addNum].experience[i].award_other = exp[i].award_name;
+              }          
+            }
+            console.log(this.secondStage[this.addNum].experience);
+          })
+        }
+      }
     })
+    console.log(this);
+
   }
 }
 </script>
@@ -507,11 +801,26 @@ body
       .sub-title
         margin-bottom 30px
         font-size 22px
+      .notice
+        color grey
+        font-size 12px
+        margin-bottom 20px
+        width 40%
       .list-form
         display flex
         flex-direction row
         align-items center
         margin-left 40px
+        .title
+          min-height 100px
+          .el-form-item__content
+            display flex
+            flex-direction column
+            align-items flex-start
+          .el-form-item__label
+            margin 10px 0
+          .el-radio
+            margin 20px 0
         .el-form-item__label
           white-space pre-line
           line-height 20px
@@ -548,8 +857,37 @@ body
             margin-left 20px
         .exp-detail
           display flex
-          flex-direction row
-          .el-form-item__content
-            margin-left 0
+          flex-direction column
+          align-items center
+          .prize.el-form
+            margin-top 20px
+            display flex
+            flex-direction row
+            align-items center
+            .el-form-item
+              display flex
+              flex-direction row
+              align-items center
+              .el-form-item__content
+                display flex
+                flex-direction row
+                align-items center
+                .el-radio
+                  display flex
+                  flex-direction row
+                  align-items center
+                  margin auto 10px
+          .el-form
+            display flex
+            flex-direction row
+            align-items center
+            .el-form-item
+              display flex
+              flex-direction row
+              align-items center
+              .el-form-item__content
+                margin 10px 0
+
+          
 </style>
 
