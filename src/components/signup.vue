@@ -98,7 +98,7 @@
             <div class="list-form">
               <div class="list-num">9.</div>
               <el-form-item class="title" :label="'该代表是否有模联参会经历? \n 如有，请写明会议名称、参会时间及身份。\n Experience in MUN'" >
-                <el-radio class="choose" v-model="secondStage[addNum].hasExp" :label="true" >是</el-radio>
+                <el-radio class="choose" v-model="secondStage[addNum].hasExp" :label="1" >是</el-radio>
                 <div v-if="secondStage[addNum].hasExp">
                 <div class="exp-detail" v-for="(exp, index) in secondStage[addNum].experience" :key="index">
                   <el-form  :inline="true" :model="exp" class="demo-form-inline" >
@@ -118,8 +118,8 @@
                   </el-form>
                   <el-form class="prize" :inline="true" :model="exp" v-if="exp.role==='Delegate'" >
                     <el-form-item :label="'是否获奖 \n Has won prize'" >
-                      <el-radio v-model="exp.is_award" :label="true" >是</el-radio>
-                      <el-radio v-model="exp.is_award" :label="false" >否</el-radio>
+                      <el-radio v-model="exp.is_award" :label="1" >是</el-radio>
+                      <el-radio v-model="exp.is_award" :label="0" >否</el-radio>
                     </el-form-item>
                     <el-form-item :label="'所获奖项 \n Type of prize'" v-if="exp.is_award" >
                       <el-radio v-model="exp.award_name" label="BD" >BD</el-radio>
@@ -134,7 +134,7 @@
                   </el-form>
                 </div>
                 </div>
-                <el-radio class="choose" v-model="secondStage[addNum].hasExp" :label="false" >否 </el-radio>
+                <el-radio class="choose" v-model="secondStage[addNum].hasExp" :label="0" >否 </el-radio>
               </el-form-item>
               <!-- <el-form :inline="true" :model="secondStage[addNum].prize" v-if="secondStage[addNum].experience.role==='Delegate'" >
                 <el-form-item label="是否获奖" >
@@ -227,15 +227,14 @@ export default {
         phone: '',
         mail: '',
         wechat: '',
-        expNum: 0,
         moreinfo: '',
-        hasExp: false,
+        hasExp: 0,
         experience:[{
 
           year: '',
           confName: '',
           role: '',
-          is_award: false,
+          is_award: 0,
           award_name: '',
           award_other: ''
         }]
@@ -268,8 +267,8 @@ export default {
       {
         this.stage = 2;
       }
-      else if(this.stage === 2 && this.secondStage[this.addNum].personName !== '' || this.secondStage[this.addNum].nation !== '' 
-      || this.secondStage[this.addNum].major !== '' || this.secondStage[this.addNum].phone !== '' || this.secondStage[this.addNum].mail !== '' )
+      else if(this.stage === 2 && this.secondStage[this.addNum].personName !== '' && this.secondStage[this.addNum].nation !== '' 
+      && this.secondStage[this.addNum].major !== '' && this.secondStage[this.addNum].phone !== '' && this.secondStage[this.addNum].mail !== '' )
       {    
         this.$ajax.post('/test/queryMember',{
           userId:this.userId,
@@ -288,8 +287,8 @@ export default {
               phone: this.secondStage[this.addNum].phone,
               mail: this.secondStage[this.addNum].mail,
               wechat: this.secondStage[this.addNum].wechat,
-              expNum: this.secondStage[this.addNum].expNum,
               moreinfo: this.secondStage[this.addNum].moreinfo,
+              hasExp: this.secondStage[this.addNum].hasExp,
               idx: this.addNum
             }).then(success =>{
               // console.log("suc:", success);
@@ -313,8 +312,6 @@ export default {
                   award_name: a_name
                 })
               }
-              this.addNum = this.addNum+1;
-              this.presentNum = this.presentNum+1;
             })
           }
           else{
@@ -329,45 +326,54 @@ export default {
               phone: this.secondStage[this.addNum].phone,
               mail: this.secondStage[this.addNum].mail,
               wechat: this.secondStage[this.addNum].wechat,
-              expNum: this.secondStage[this.addNum].expNum,
+              hasExp: this.secondStage[this.addNum].hasExp,
               moreinfo: this.secondStage[this.addNum].moreinfo,
               idx: this.addNum
             }).then(success =>{
-              // console.log("suc:", success);
+              console.log("suc:", success);
               this.curNum = success.data.id;
               // console.log("sec:", this.secondStage[this.addNum])
-              for(let i = 0; i< this.secondStage[this.addNum].experience.length;i++){
-                let term = this.secondStage[this.addNum].experience[i];
-                // console.log("EXP:", term);
-
-                let a_name = term.award_name;
-                if( term.award_name == "other"){
-                  a_name = term.award_other;
+              if(this.secondStage[this.addNum].hasExp === 1){
+                for(let i = 0; i< this.secondStage[this.addNum].experience.length;i++){
+                  let term = this.secondStage[this.addNum].experience[i];
+                  // console.log("EXP:", term);
+                  let a_name = term.award_name;
+                  if( term.award_name == "other"){
+                    a_name = term.award_other;
+                  }
+                  this.$ajax.post('/test/addExp',{
+                    present_id: this.curNum,
+                    exp_id: i+1,
+                    conf_name: term.confName,
+                    conf_year: term.year,
+                    conf_role: term.role,
+                    is_award: term.is_award,
+                    award_name: a_name
+                  })
+        
                 }
-                this.$ajax.post('/test/addExp',{
-                  present_id: this.curNum,
-                  exp_id: i+1,
-                  conf_name: term.confName,
-                  conf_year: term.year,
-                  conf_role: term.role,
-                  is_award: term.is_award,
-                  award_name: a_name
-
-                })
-      
               }
-              this.addNum = this.addNum+1;
               this.presentNum = this.presentNum+1;
+              console.log("add presentNum")
             })
 
             console.log(this.curNum);
           }
         })
-        for(let k = 0;k<6;k++){
-          this.thirdStage.availNum[k] = this.presentNum > 4 ? 4 : this.presentNum + 1 ;
-        }
-        this.stage = 3;
         console.log(this.presentNum, this.addNum)
+        setTimeout(()=>{
+          for(let k = 0;k<6;k++){
+            this.thirdStage.availNum[k] = this.presentNum ;
+            for(let m=0;m<6;m++){
+              if(m!==k)
+                this.thirdStage.availNum[k] = this.thirdStage.availNum[k] - this.thirdStage.selectNum[m];  
+            }
+            if(this.thirdStage.availNum[k] > 4){
+              this.thirdStage.availNum[k] = 4;
+            }
+          }
+          this.stage = 3;
+        },1000)
       }
     },
     nextMember(){
@@ -377,7 +383,7 @@ export default {
         idx: this.addNum + 1
       }).then(data =>{
         let memberInfo = data.data.info;
-        console.log(memberInfo);
+        // console.log(memberInfo);
         let tmp = {
           personName: memberInfo.name,
           gender: memberInfo.gender,
@@ -387,14 +393,13 @@ export default {
           phone: memberInfo.tel,
           mail: memberInfo.email,
           wechat: memberInfo.wechat,
-          expNum: memberInfo.exp_num,
           moreinfo: memberInfo.more,
-          hasExp: false,
+          hasExp: memberInfo.hasExp,
           experience:[{
             year: '',
             confName: '',
             role: '',
-            is_award: false,
+            is_award: 0,
             award_name: '',
             award_other: ''
           }]
@@ -405,7 +410,7 @@ export default {
             year: '',
             confName: '',
             role: '',
-            is_award: false,
+            is_award: 0,
             award_name: '',
             award_other: ''
           }
@@ -418,9 +423,7 @@ export default {
         }).then(suc =>{
           // console.log("exp",suc.data.info)
           let exp = suc.data.info;
-          if(exp.length>0){
-            tmp.hasExp = true;
-          }
+
           for(let i=0;i<exp.length;i++){
             tmp.experience[i].year = exp[i].conf_year;
             tmp.experience[i].confName = exp[i].conf_name;
@@ -444,13 +447,16 @@ export default {
         // this.secondStage[this.addNum].phone=memberInfo.tel;
         // this.secondStage[this.addNum].mail=memberInfo.email;
         // this.secondStage[this.addNum].wechat=memberInfo.wechat;
-        // this.secondStage[this.addNum].expNum=memberInfo.exp_num;
         // this.secondStage[this.addNum].moreinfo=memberInfo.more;
         this.secondStage.push(tmp)
       })
       this.addNum = this.addNum + 1
     },
     submitPerson(){
+      if(this.secondStage[this.addNum].personName === '' || this.secondStage[this.addNum].nation === '' 
+      || this.secondStage[this.addNum].major === '' || this.secondStage[this.addNum].phone === '' || this.secondStage[this.addNum].mail === ''){
+        return;
+      }
       this.$ajax.post('/test/queryMember',{
         userId:this.userId,
         idx: this.addNum
@@ -468,8 +474,8 @@ export default {
             phone: this.secondStage[this.addNum].phone,
             mail: this.secondStage[this.addNum].mail,
             wechat: this.secondStage[this.addNum].wechat,
-            expNum: this.secondStage[this.addNum].expNum,
             moreinfo: this.secondStage[this.addNum].moreinfo,
+            hasExp: this.secondStage[this.addNum].hasExp,
             idx: this.addNum
           }).then(success =>{
             // console.log("suc:", success);
@@ -493,8 +499,6 @@ export default {
                 award_name: a_name
               })
             }
-            this.addNum = this.addNum+1;
-            this.presentNum = this.presentNum+1;
           })
         }
         else{
@@ -509,8 +513,8 @@ export default {
             phone: this.secondStage[this.addNum].phone,
             mail: this.secondStage[this.addNum].mail,
             wechat: this.secondStage[this.addNum].wechat,
-            expNum: this.secondStage[this.addNum].expNum,
             moreinfo: this.secondStage[this.addNum].moreinfo,
+            hasExp: this.secondStage[this.addNum].hasExp,
             idx: this.addNum
           }).then(success =>{
             // console.log("suc:", success);
@@ -532,15 +536,13 @@ export default {
                 conf_role: term.role,
                 is_award: term.is_award,
                 award_name: a_name
-
               })
-    
             }
-            this.addNum = this.addNum+1;
             this.presentNum = this.presentNum+1;
+            console.log("add presentNum")
           })
-          console.log(this.curNum);
         }
+        this.addNum = this.addNum+1;
         let ele = {
           personName: '',
           gender: 'male',
@@ -550,13 +552,13 @@ export default {
           phone: '',
           mail: '',
           wechat: '',
-          expNum: 0,
           moreinfo: '',
+          hasExp:0,
           experience:[{
             year: '',
             confName: '',
             role: '',
-            is_award: false,
+            is_award: 0,
             award_name: '',
             award_other: ''
           }]
@@ -568,7 +570,7 @@ export default {
             year: '',
             confName: '',
             role: '',
-            is_award: false,
+            is_award: 0,
             award_name: '',
             award_other: ''
           }
@@ -619,9 +621,9 @@ export default {
           submitTime: (new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString()
         })
       }
-      this.$ajax.post('/test/getSignup',{
-        userId: this.userId
-      })
+      // this.$ajax.post('/test/getSignup',{
+      //   userId: this.userId
+      // })
       this.stage=4;
 
     },
@@ -649,7 +651,7 @@ export default {
           year: '',
           confName: '',
           role: '',
-          is_award: false,
+          is_award: 0,
           award_name: '',
           award_other: ''
         }
@@ -664,9 +666,6 @@ export default {
         this.signup = true;
         this.firstStage.schoolName = userInfo.school_name;
         this.firstStage.leaderName = userInfo.leader_name;
-        for(let k = 0;k<6;k++){
-          this.thirdStage.availNum[0] = userInfo.present_num > 4 ? 4 : userInfo.present_num;
-        }
         this.thirdStage.selectNum[0] = userInfo.unsc_num;
         this.thirdStage.selectNum[1] = userInfo.unga4_num;
         this.thirdStage.selectNum[2] = userInfo.unga1_num;
@@ -674,6 +673,16 @@ export default {
         this.thirdStage.selectNum[4] = userInfo.inter5g_num;
         this.thirdStage.selectNum[5] = userInfo.mpc_num;
         this.presentNum = userInfo.present_num;
+        for(let k = 0;k<6;k++){
+          this.thirdStage.availNum[k] = this.presentNum ;
+          for(let m=0;m<6;m++){
+            if(m!==k)
+              this.thirdStage.availNum[k] = this.thirdStage.availNum[k] - this.thirdStage.selectNum[m];  
+          }
+          if(this.thirdStage.availNum[k] > 4){
+            this.thirdStage.availNum[k] = 4;
+          }
+        }
         console.log("userInfo:",userInfo);
       }
       else{
@@ -696,31 +705,30 @@ export default {
         this.secondStage[this.addNum].phone=memberInfo.tel;
         this.secondStage[this.addNum].mail=memberInfo.email;
         this.secondStage[this.addNum].wechat=memberInfo.wechat;
-        this.secondStage[this.addNum].expNum=memberInfo.exp_num;
         this.secondStage[this.addNum].moreinfo=memberInfo.more;
+        this.secondStage[this.addNum].hasExp=memberInfo.hasExp;
         let pid = memberInfo.present_id;
-        this.$ajax.post('/test/queryExp', {
+        if(this.secondStage[this.addNum].hasExp === 1){
+          this.$ajax.post('/test/queryExp', {
           present_id: pid
-        }).then(suc =>{
-          // console.log("exp",suc.data.info)
-          let exp = suc.data.info;
-          if(exp.length>0){
-            this.secondStage[this.addNum].hasExp = true;
-          }
-          for(let i=0;i<exp.length;i++){
-            this.secondStage[this.addNum].experience[i].year = exp[i].conf_year;
-            this.secondStage[this.addNum].experience[i].confName = exp[i].conf_name;
-            this.secondStage[this.addNum].experience[i].role = exp[i].conf_role;
-            this.secondStage[this.addNum].experience[i].is_award = exp[i].is_award;
-            if(exp[i].award_name == 'BD' || exp[i].award_name == 'OD' || exp[i].award_name == 'HM'){
-              this.secondStage[this.addNum].experience[i].award_name = exp[i].award_name;              
+          }).then(suc =>{
+            // console.log("exp",suc.data.info)
+            let exp = suc.data.info;
+            for(let i=0;i<exp.length;i++){
+              this.secondStage[this.addNum].experience[i].year = exp[i].conf_year;
+              this.secondStage[this.addNum].experience[i].confName = exp[i].conf_name;
+              this.secondStage[this.addNum].experience[i].role = exp[i].conf_role;
+              this.secondStage[this.addNum].experience[i].is_award = exp[i].is_award;
+              if(exp[i].award_name == 'BD' || exp[i].award_name == 'OD' || exp[i].award_name == 'HM'){
+                this.secondStage[this.addNum].experience[i].award_name = exp[i].award_name;              
+              }
+              else{
+                this.secondStage[this.addNum].experience[i].award_other = exp[i].award_name;
+              }          
             }
-            else{
-              this.secondStage[this.addNum].experience[i].award_other = exp[i].award_name;
-            }          
-          }
-          console.log(this.secondStage[this.addNum].experience);
-        })
+            console.log(this.secondStage[this.addNum].experience);
+          })
+        }
       }
     })
     console.log(this);

@@ -64,7 +64,7 @@
       <div class="question">委员会及国家分配结果将在什么时候公布？</div>
       <div class="answer"><p>委员会分配结果将于2019年10月31日于网站平台中统一发放予各领队，请领队进行确认，并根据各委员会的席位数量后方填写参加该委员会的代表姓名。</p>
       <p>国家分配将于2019年11月25之前公布，分配结果将基于各代表的学术测试表现。</p></div>
-      <!-- <div class="question">【这里缺了一个问题的翻译】</div> -->
+      <div class="question">When will committee and country allocations be distributed?</div>
       <div class="answer"><p>Committee allocations will be distributed on the website on October DD, 2019. The Head Delegate is required to confirm and fill in the names of the delegates of each committee. And, the number of delegates of each committee should be in accordance with that of the seats provided.</p>
       <p>Country allocations will be released by February 17, 2019, and will be based on each delegates’ performance in the academic test.</p></div>
       <div class="question">我能否选择代表的国家？</div>

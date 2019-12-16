@@ -5,60 +5,7 @@
       <swiper-slide v-for="item in files" :key="item">
         <img v-lazy="'../../../../static/swiper/'+item+'.jpg'" style=" height:100%"> 
       </swiper-slide>
-      <!-- <swiper-slide>
-        <img src="../../img/swiper/6.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/7.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/8.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/9.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/10.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/11.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/12.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/13.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/14.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/15.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/16.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/17.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/18.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/19.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/20.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/21.jpg" style=" height:100%">
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../img/swiper/22.jpg" style=" height:100%">
-      </swiper-slide> -->
-      <!-- <swiper-slide>I'm Slide 2</swiper-slide>
-      <swiper-slide>I'm Slide 3</swiper-slide>
-      <swiper-slide>I'm Slide 4</swiper-slide> -->
+     
       <!-- Optional controls -->
       <div class="swiper-pagination "  slot="pagination"></div>
       <div class="swiper-button-prev swiper-button-black" slot="button-prev"></div>

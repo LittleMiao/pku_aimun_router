@@ -39,7 +39,7 @@
         </div>
         <div class="btns">
           <div class="person-btn" @click="gotoSignup">{{signup? "查看报名信息" : "开始报名"}}</div>
-          <div v-if="commit" class="person-btn">查看分配结果</div>
+          <div v-if="commit" class="person-btn" @click="gotoRes">查看分配结果</div>
         </div>
       </div>
       <div class="not-login" v-else>
@@ -71,6 +71,9 @@ export default {
   methods:{
     gotoSignup(){
       this.$router.push('/signup');
+    },
+    gotoRes(){
+      this.$router.push('/distribution');
     }
   },
   mounted(){
