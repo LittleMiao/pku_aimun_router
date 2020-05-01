@@ -2,15 +2,25 @@
   <div class="head-wrapper">
     <div class="head-tip">
       <div id="time">{{date | formateDate }}</div>
-      <div class="log-info" v-if="!isLogin"> 
-        <div class="log-item" @click="toLogin" > 登录 </div>
-        <div class="log-item" @click="toRegister" v-if="!isLogin"> 注册 </div>
-        <!-- <div class="log-item" @click="toHelp"> 帮助 </div> -->
-      </div>
-      <div class="log-info" v-else>
-        <div class="log-item wide" @click="toPersonal">个人中心</div>
-        <div class="log-item wide" @click="logout" > 退出登录 </div>
-        <!-- <div class="log-item" @click="toHelp"> 帮助 </div> -->
+      <div class="right">
+        <div class="lang">
+          <div @click="changeLang(1)">
+            中文
+          </div>
+          <div @click="changeLang(2)">
+            English
+          </div>
+        </div>
+        <div class="log-info" v-if="!isLogin"> 
+          <div class="log-item" @click="toLogin" > 登录 </div>
+          <div class="log-item" @click="toRegister" v-if="!isLogin"> 注册 </div>
+          <!-- <div class="log-item" @click="toHelp"> 帮助 </div> -->
+        </div>
+        <div class="log-info" v-else>
+          <div class="log-item wide" @click="toPersonal">个人中心</div>
+          <div class="log-item wide" @click="logout" > 退出登录 </div>
+          <!-- <div class="log-item" @click="toHelp"> 帮助 </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -22,7 +32,8 @@ export default {
     return {
       date: new Date(),
       isLogin: false,
-      userName: ''
+      userName: '',
+      lang: this.$cookies.get('language') || 1
     }
   },
   mounted() {  
@@ -78,6 +89,12 @@ export default {
     },
     toPersonal(){
       this.$router.push('/personal')
+    },
+    changeLang(data){
+      this.lang = data;
+      this.$cookies.remove('language');
+      this.$cookies.set('language',this.lang );
+      console.log(this.$cookies.get('language'))
     }
   }
 }
@@ -95,14 +112,26 @@ export default {
     flex-direction row
     justify-content space-between
     align-items center
-    .log-info
+    .right
+      width 23%
       display flex
       flex-direction row
-      justify-content space-evenly
-      .log-item
-        width 60px
-        &.wide 
-          width 80px
+      justify-content space-between
+      align-items center
+      .lang
+        display flex
+        flex-direction row
+        width 40%
+        justify-content space-around
+        align-items center
+      .log-info
+        display flex
+        flex-direction row
+        justify-content space-evenly
+        .log-item
+          width 60px
+          &.wide 
+            width 80px
 
 </style>
 

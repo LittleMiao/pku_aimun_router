@@ -29,6 +29,7 @@ export default {
       isLogin: false,
       contentIndex: 0,
       userName: this.$cookies.get('userName'),
+      lang: this.$cookies.get('language') || 1
     }   
   },
   methods:{
