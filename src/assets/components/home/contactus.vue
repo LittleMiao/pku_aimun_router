@@ -22,7 +22,7 @@
     margin-top 20px
   .title
     font-weight bold
-    font-size 32px
+    font-size 24px
     text-indent 0
     margin-top 40px
 </style>

@@ -1,5 +1,6 @@
 <template>
   <div class="memberList">
+    <div class="title">AIMUN2020组委会名单</div>
     <table border="1"
       bordercolor="#e8e8e8">
       <tbody>
@@ -43,7 +44,7 @@
             <div>助理秘书长</div>
           </td>
           <td>
-            <div>Li Kar Hing, Kimmya</div>
+            <div>Li Kar Hing, Kimmy</div>
             <div>李嘉馨</div>
           </td>
           <td>国关18本</td>
@@ -153,10 +154,10 @@
           <td>外院18本</td>
         </tr>
         <tr>
-          <td rowspan="2">
+          <td rowspan="3">
             <div>Director of Publicity</div> 
             <div>宣传总监</div>
-            </td>
+          </td>
           <td>
             <div>Xin Qingrong, Max</div>
             <div>辛青融</div>
@@ -165,10 +166,17 @@
         </tr>
         <tr>
           <td>
-            <div>(Tentative)</div>
-            <div>待定</div>
+            <div>Ng Jing Wen</div>
+            <div>黄靖雯</div>
           </td>
-          <td></td>
+          <td>国关18本</td>
+        </tr>
+        <tr>
+          <td>
+            <div>Dong Hui, Sophia</div>
+            <div>董慧</div>
+          </td>
+          <td>外院18本</td>
         </tr>
         <tr>
           <td>
@@ -229,6 +237,11 @@
 <style lang="stylus">
 .memberList
   width 100%
+  .title
+    font-size 24px
+    font-weight bold
+    text-align  center
+    margin-bottom 30px 
   table
     width 100%
     border-collapse collapse

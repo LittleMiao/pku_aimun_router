@@ -38,8 +38,8 @@
           </div>
         </div>
         <div class="btns">
-          <div class="person-btn" @click="gotoSignup">查看报名信息</div>
-          <div class="person-btn">查看分配结果</div>
+          <div class="person-btn" @click="gotoSignup">{{signup? "查看报名信息" : "开始报名"}}</div>
+          <div v-if="commit" class="person-btn" @click="gotoRes">查看分配结果</div>
         </div>
       </div>
       <div class="not-login" v-else>
@@ -71,13 +71,16 @@ export default {
   methods:{
     gotoSignup(){
       this.$router.push('/signup');
+    },
+    gotoRes(){
+      this.$router.push('/distribution');
     }
   },
   mounted(){
     console.log(this.$cookies.get('userId'));
     this.userId = this.$cookies.get('userId');
     if(this.userId){
-      this.$ajax.post('test/query_personal',{
+      this.$ajax.post('/test/query_personal',{
         userId: this.userId
       }).then(data =>{
         let userInfo = data.data.info;
@@ -87,7 +90,18 @@ export default {
         this.position = userInfo.position;
         this.mail = userInfo.user_email;
       })
+      this.$ajax.post('/test/queryCond',{
+        userId: this.userId
+      }).then(data =>{
+          let condata = data.data.info;
+          console.log(data)
+          this.register = condata.register;
+          this.signup = condata.signup;
+          this.commit = condata.committee;
+          this.pay = condata.fee;
+      })
     }
+    console.log(this)
   }
 }
 </script>

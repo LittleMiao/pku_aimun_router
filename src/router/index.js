@@ -7,7 +7,9 @@ import login  from '@/components/login.vue'
 import pay  from '@/components/pay.vue'
 import personal  from '@/components/personal.vue'
 import register  from '@/components/register.vue'
-import signup  from '@/components/signup.vue'
+import signup  from '@/components/signup.vue' 
+import admin  from '@/components/admin.vue' 
+import distribution  from '@/components/distribution.vue' 
 
 Vue.use(Router)
 
@@ -53,6 +55,16 @@ export default new Router({
       path: '/signup',
       name: '报名',
       component: signup
+    },
+    {
+      path: '/admin',
+      name: '管理员页面',
+      component: admin
+    },
+    {
+      path: '/distribution',
+      name: '分配结果',
+      component: distribution
     },
   ]
 })

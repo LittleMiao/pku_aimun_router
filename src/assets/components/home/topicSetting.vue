@@ -1,5 +1,6 @@
 <template>
   <div class="topic">
+    <div class="title">委员会及议题设置</div>
     <table border="1"
       bordercolor="#e8e8e8">
       <tbody>
@@ -54,15 +55,21 @@
         </tr>
       </tbody>
     </table>
-    <div class="hint">
+    
+    <!-- <div class="hint">
       注：2019年北京大学学生模拟联合国校际交流会将采用“北京大学标准议事规则”。大使项目、主新闻中心的议事规则有别于标准议事规则，将在后续发布。
-    </div>
+    </div> -->
   </div>
 </template>
 
 <style lang="stylus">
 .topic
   width 100%
+  .title
+    font-size 24px
+    font-weight bold
+    text-align  center
+    margin-bottom 30px 
   table
     width 100%
     border-collapse collapse

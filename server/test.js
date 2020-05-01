@@ -37,27 +37,15 @@ router.use('/test/addUser', function (req, res) {
   })
 });
 
-router.use('/test/addMember', function (req, res) {
-  let sql  ="INSERT INTO member_info ( name, gender, nation, major, grade, tel, email, wechat, exp_num, more, idx, user_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);";
-  let sqlParams = [
-    req.body.name,
-    req.body.gender,
-    req.body.nation,
-    req.body.major,
-    req.body.grade,
-    req.body.phone,
-    req.body.mail,
-    req.body.wechat,
-    req.body.expNum,
-    req.body.moreinfo,
-    req.body.idx,
-    req.body.userId,
-  ];
+router.use('/test/queryExp', function(req, res){
+  let sql = "SELECT * from exp_info WHERE present_id=?";
+  let sqlParams=[
+     req.body.present_id
+  ]
   query(sql,sqlParams,function (err,result) {
     if(err){
       res.json({
         ok:false,
-        message:'添加失败！',
         info: err
       })
       console.log(err)
@@ -65,9 +53,9 @@ router.use('/test/addMember', function (req, res) {
       res.json({
         ok:true,
         id:result.insertId,
-        message:'添加成功！',
+        info: result,
       })
-      console.log("addMember:",result)
+      console.log(result)
     }
     res.end();
   })
@@ -103,9 +91,43 @@ router.use('/test/addExp', function(req, res){
     res.end();
   })
 });
+router.use('/test/updateExp', function(req, res){
+  // let sql  ="INSERT INTO exp_info ( present_id, exp_id, conf_name, conf_year, conf_role, is_award, award_name) VALUES(?,?,?,?,?,?,?);";
+  console.log(req.body);
+  let sql  ="UPDATE exp_info SET conf_name=?, conf_year=?, conf_role=?, is_award=?, award_name=? WHERE present_id=? and exp_id=?;";
 
-router.use('/test/updateMember', function (req, res) {
-  let sql  ="UPDATE member_info name=?, gender=?, nation=?, major=?, grade=?, tel=?, email=?, wechat=?, exp_num=?, more=? WHERE idx=? and user_id=?;";
+  let sqlParams = [
+
+    req.body.conf_name,
+    req.body.conf_year,
+    req.body.conf_role,
+    req.body.is_award,
+    req.body.award_name,
+    req.body.present_id,
+    req.body.exp_id,
+  ];
+  query(sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        message:'更新失败！',
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+        message:'更新成功！',
+      })
+      console.log("updateExp:", sqlParams)
+    }
+    res.end();
+  })
+});
+
+router.use('/test/addMember', function (req, res) {
+  let sql  ="INSERT INTO member_info ( name, gender, nation, major, grade, tel, email, wechat, hasExp, more, idx, user_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);";
   let sqlParams = [
     req.body.name,
     req.body.gender,
@@ -115,7 +137,42 @@ router.use('/test/updateMember', function (req, res) {
     req.body.phone,
     req.body.mail,
     req.body.wechat,
-    req.body.expNum,
+    req.body.hasExp,
+    req.body.moreinfo,
+    req.body.idx,
+    req.body.userId,
+  ];
+  query(sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        message:'添加失败！',
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+        message:'添加成功！',
+      })
+      console.log("addMember:",result)
+    }
+    res.end();
+  })
+});
+router.use('/test/updateMember', function (req, res) {
+  let sql  ="UPDATE member_info SET name=?, gender=?, nation=?, major=?, grade=?, tel=?, email=?, wechat=?, hasExp=?, more=? WHERE idx=? and user_id=?;";
+  let sqlParams = [
+    req.body.name,
+    req.body.gender,
+    req.body.nation,
+    req.body.major,
+    req.body.grade,
+    req.body.phone,
+    req.body.mail,
+    req.body.wechat,
+    req.body.hasExp,
     req.body.moreinfo,
     req.body.idx,
     req.body.userId,
@@ -165,14 +222,16 @@ router.use('/test/queryMember', function (req, res) {
 });
 
 router.use('/test/signup', function (req, res) {
-  let sql = "SELECT * from signup_info WHERE user_id="+req.body.userId;
-  let upd_sql ="UPDATE signup_info SET school_name=?, leader_name=?, present_num=?, unsc_num=?, mpc_num=?, submit_time=? WHERE user_id=?;";
-  let ins_sql  ="INSERT INTO signup_info (school_name, leader_name, present_num, unsc_num, mpc_num, submit_time,user_id) VALUES(?,?,?,?,?,?,?);";
+  let ins_sql  ="INSERT INTO signup_info (school_name, leader_name, present_num, unsc_num, unga4_num, unga1_num, unga2_num, inter5g_num, mpc_num, submit_time,user_id) VALUES(?,?,?,?,?,?,?,?,?,?,?);";
   let sqlParams = [
     req.body.schoolName,
     req.body.leaderName,
     req.body.presentNum,
     req.body.unscNum,
+    req.body.unga4Num,
+    req.body.unga1Num,
+    req.body.unga2Num,
+    req.body.inter5gNum,
     req.body.mpcNum,
     req.body.submitTime,
     req.body.userId,
@@ -197,14 +256,17 @@ router.use('/test/signup', function (req, res) {
   })
 });
 router.use('/test/update', function (req, res) {
-  let sql = "SELECT * from signup_info WHERE user_id="+req.body.userId;
-  let upd_sql ="UPDATE signup_info SET school_name=?, leader_name=?, present_num=?, unsc_num=?, mpc_num=?, submit_time=? WHERE user_id=?;";
-  let ins_sql  ="INSERT INTO signup_info (school_name, leader_name, present_num, unsc_num, mpc_num, submit_time,user_id) VALUES(?,?,?,?,?,?,?);";
+  let upd_sql ="UPDATE signup_info SET school_name=?, leader_name=?, present_num=?, unsc_num=?, unga4_num=?,unga1_num=?,unga2_num=?,inter5g_num=?,mpc_num=?, submit_time=? WHERE user_id=?;";
+
   let sqlParams = [
     req.body.schoolName,
     req.body.leaderName,
     req.body.presentNum,
     req.body.unscNum,
+    req.body.unga4Num,
+    req.body.unga1Num,
+    req.body.unga2Num,
+    req.body.inter5gNum,
     req.body.mpcNum,
     req.body.submitTime,
     req.body.userId,
@@ -273,9 +335,10 @@ router.use('/test/query_personal', function (req, res) {
 /*登录*/
 router.use('/test/login',function(req, res){
   // console.log(req.body);
-  let sql = "SELECT user_email, password FROM log_info";
+  let sql = "SELECT user_email, password FROM log_info WHERE user_email = ? AND password = ?";
   query(sql, [req.body.email, req.body.password], function(err, result){
-    if(err){
+    console.log(result)
+    if(err ||result.length === 0){
       res.json({
         ok:false,
         message:'登录失败！',
@@ -310,87 +373,300 @@ router.use('/test/getUid',function(req,res) {
     res.end();
   })
 })
-/*删除*/
-router.use('/test/delete', function (req, res) {
-  let delSql = 'DELETE FROM user_info where id='+req.body.id;
-  query(delSql,null, function(err, rows, fields) {
+
+router.use('/test/userInfo',function(req,res){
+  let sql = "SELECT * FROM log_info "
+  query(sql,null, function(err,result){
     if(err){
       res.json({
         ok:false,
-        message:'删除失败！',
         error:err
       })
+      console.log(err)
     }else{
       res.json({
         ok:true,
-        message:'删除成功！'
+        info: result,
       })
     }
     res.end();
   })
-});
-/*编辑*/
-router.use('/test/edit', function (req, res) {
-  let editSql = 'UPDATE user_info SET name=?,country=?,date=?,score=? WHERE id ='+req.body.id;
-  let editSqlParams = [
-    req.body.name,
-    req.body.country,
-    req.body.date,
-    req.body.score
-  ];
-  query(editSql,editSqlParams,function (err,result) {
+})
+
+router.use('/test/signupInfo',function(req,res){
+  let sql = "SELECT * FROM signup_info "
+  query(sql,null, function(err,result){
     if(err){
       res.json({
         ok:false,
-        message:'修改失败！'
+        error:err
       })
+      console.log(err)
     }else{
       res.json({
         ok:true,
-        message:'修改成功！'
+        info: result,
       })
     }
     res.end();
   })
-});
-/*查询*/
-router.use('/test/query', function (req, res) {
-  let pageNumber = req.body.pageNumber;
-  let pageSize = req.body.pageSize;
-  let start = (pageNumber-1)*pageSize;
-  let end = pageNumber*pageSize;
-  // let sql = "SELECT * FROM user_info ORDER BY score DESC LIMIT "+start+","+end;
-  let sql = "SELECT * FROM user_info ORDER BY score DESC";
-  let countSql = "SELECT COUNT(id) FROM user_info";
-  console.log(sql);
-  const promise = new Promise(function(resolve, reject) {
-    query(countSql,null,function (err, rows, fields) {
-      resolve(rows);
-    })
-  }).then((count)=>{
-    query(sql,null, function(err, rows, fields) {
-      if(err){
-        res.json({
-          ok:false,
-          message:'查询失败！',
-          info:err
-        })
-      }else{
-        res.json({
-          ok:true,
-          message:'查询成功！',
-          info:rows,
-          total:count[0]["COUNT(id)"]
-        })
-      }
-      res.end();
-    });
+})
+
+router.use('/test/memberInfo',function(req,res){
+  let sql = "SELECT * FROM member_info "
+  query(sql,null, function(err,result){
+    if(err){
+      res.json({
+        ok:false,
+        error:err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        info: result,
+      })
+    }
+    res.end();
   })
+})
 
+router.use('/test/expInfo',function(req,res){
+  let sql = "SELECT * FROM exp_info "
+  query(sql,null, function(err,result){
+    if(err){
+      res.json({
+        ok:false,
+        error:err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        info: result,
+      })
+    }
+    res.end();
+  })
+})
+router.use('/test/condInfo',function(req,res){
+  let sql = "SELECT * FROM cond_info "
+  query(sql,null, function(err,result){
+    if(err){
+      res.json({
+        ok:false,
+        error:err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        info: result,
+      })
+    }
+    res.end();
+  })
+})
 
+router.use('/test/initCond',function(req,res){
+  let sql  ="INSERT INTO cond_info (user_id, register, signup, committee, fee) VALUES(?,0,0,0,0);";
+  let sqlParams=[
+    req.body.user_id
+  ]
+  query(sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+        info: result,
+      })
+      console.log(result)
+    }
+    res.end();
+  })
+})
+router.use('/test/queryCond', function(req, res){
+  let sql = "SELECT * from cond_info WHERE user_id=?";
+  let sqlParams=[
+     req.body.userId
+  ]
+  query(sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+        info: result[0],
+      })
+      console.log(result)
+    }
+    res.end();
+  })
+});
+router.use('/test/getSignup', function (req, res) {
+  let upd_sql ="UPDATE cond_info SET signup=1 WHERE user_id=?;";
 
+  let sqlParams = [
+    req.body.userId,
+  ];
+  query(upd_sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+      })
+      console.log("success!")
+    }
+    res.end();
+  })
+});
+router.use('/test/updateReg', function (req, res) {
+  let upd_sql ="UPDATE cond_info SET register=1 WHERE user_id=?;";
+
+  let sqlParams = [
+    req.body.userId,
+  ];
+  query(upd_sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+      })
+      console.log("success!")
+    }
+    res.end();
+  })
 });
 
+router.use('/test/queryDistr', function(req, res){
+  let sql = "SELECT * from distri_info WHERE user_id=?";
+  // let sql = "SELECT * from distri_info";
+  let sqlParams=[
+     req.body.userId
+  ]
+  query(sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+        info: result[0],
+      })
+      console.log(result)
+    }
+    res.end();
+  })
+});
+router.use('/test/queryDisName', function(req, res){
+  let sql = "SELECT * from distri_name WHERE user_id=?";
+  // let sql = "SELECT * from distri_info";
+  let sqlParams=[
+     req.body.userId
+  ]
+  query(sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+        info: result,
+      })
+      console.log(result)
+    }
+    res.end();
+  })
+});
+router.use('/test/addDistr', function(req, res){
+  let sql = "INSERT INTO distri_name (user_id, unsc_name, unga4_name, unga1_name, unga2_name, inter5g_name, mpc_name) VALUES(?,?,?,?,?,?,?);";
+  // let sql = "SELECT * from distri_info";
+  console.log(req.body)
+  let sqlParams=[
+     req.body.userId,
+     req.body.unscName, 
+     req.body.unga4Name, 
+     req.body.unga1Name, 
+     req.body.unga2Name, 
+     req.body.inter5gName, 
+     req.body.mpcName
+  ]
+  query(sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+      })
+      console.log(result)
+    }
+    res.end();
+  })
+});
+router.use('/test/updateDistr', function (req, res) {
+  let upd_sql ="UPDATE distri_name SET unsc_name=?, unga4_name=?, unga1_name=?, unga2_name=?, inter5g_name=?, mpc_name=? WHERE user_id=?;";
 
+  let sqlParams = [
+    req.body.unscName, 
+    req.body.unga4Name, 
+    req.body.unga1Name, 
+    req.body.unga2Name, 
+    req.body.inter5gName, 
+    req.body.mpcName,
+    req.body.userId,
+  ];
+  query(upd_sql,sqlParams,function (err,result) {
+    if(err){
+      res.json({
+        ok:false,
+        info: err
+      })
+      console.log(err)
+    }else{
+      res.json({
+        ok:true,
+        id:result.insertId,
+      })
+      console.log("success!")
+    }
+    res.end();
+  })
+});
 /*将路由模块输出*/
 module.exports = router;

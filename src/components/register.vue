@@ -4,7 +4,7 @@
     <div class="register-body">
       <div class="main-title">注册</div>
       <div class="main-hint">
-        <p>请注意：停止注册时间为（报名截止前两天就停止注册，待补日期）</p>
+        <p>请注意：停止注册时间为10月28日</p>
         <p>只有领队才需要注册并登陆，账号仅用以查看报名结果。如果希望报名，请联系学校模联协会领队，或大会代表联系总监。</p>
       </div>
       <div class="register-form">
@@ -123,6 +123,10 @@ export default {
       }).then(success => {
           // this.dialogVisible = false;
           this.$message(success.data.message);
+          console.log(success)
+          this.$ajax.post('/test/initCond',{
+            user_id: success.data.id
+          })
           // this.queryData()
           setTimeout(()=>{
             this.$router.push('/home')
